@@ -1,0 +1,2981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Vision — Orientation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b2942;
+    --navy-2:#0e3350;
+    --teal:#0f9488;
+    --teal-dark:#0c7d73;
+    --teal-light:#e6f7f5;
+    --orange:#f5a623;
+    --orange-light:#fff4e0;
+    --bg:#f5f8fa;
+    --card:#ffffff;
+    --border:#e7edf1;
+    --text:#1e2a38;
+    --muted:#6b7c8d;
+    --success:#16a34a;
+    --radius:14px;
+    --shadow:0 2px 10px rgba(11,41,66,0.06);
+    --correct-bg:#f2fbf6;
+    --incorrect-bg:#fdf4f2;
+    --navy:#0b2942;
+    --navy-2:#0e3350;
+    --heading:#0b2942;
+  }
+
+  html[data-theme="dark"]{
+    --bg:#0e151d;
+    --card:#161f29;
+    --border:#28333f;
+    --text:#e7edf3;
+    --muted:#8fa1b2;
+    --teal-light:#0f2b28;
+    --orange-light:#2c2314;
+    --shadow:0 2px 14px rgba(0,0,0,0.35);
+    --correct-bg:#0f2b1d;
+    --incorrect-bg:#2e1a17;
+    --heading:#eaf1f8;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    min-height:100vh;
+    transition:background .2s ease, color .2s ease;
+  }
+  h1,h2,h3{font-family:'Poppins',sans-serif; margin:0;}
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    width:260px;
+    flex-shrink:0;
+    background:linear-gradient(180deg,var(--navy),var(--navy-2));
+    color:#cfe1ee;
+    padding:22px 16px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    padding:4px 6px 22px 6px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    margin-bottom:18px;
+  }
+  .logo .cap{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+  }
+  .logo .name{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.1;}
+  .logo .name span{display:block;font-size:10.5px;letter-spacing:2px;font-weight:600;color:#7fa9c4;}
+
+  .nav-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:#5f88a6;margin:14px 8px 8px;font-weight:600;}
+
+  .nav-item{
+    display:flex; align-items:center; gap:12px;
+    padding:11px 12px; border-radius:10px; margin-bottom:4px;
+    cursor:pointer; font-size:14px; font-weight:500; color:#c7dae8;
+    transition:background .15s ease, color .15s ease;
+    position:relative;
+  }
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{background:var(--teal); color:#fff;}
+  .nav-badge{
+    width:22px;height:22px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;flex-shrink:0;
+    background:rgba(255,255,255,0.12); color:#9fc0d6;
+  }
+  .nav-item.done .nav-badge{background:var(--orange); color:#3a2a05;}
+  .nav-item.active .nav-badge{background:rgba(255,255,255,0.25); color:#fff;}
+  .nav-item .num{flex:1;}
+  .nav-item .step{font-size:10.5px; color:#7fa9c4; font-weight:600;}
+  .nav-item.active .step{color:#dff5f1;}
+
+  .side-footer{
+    margin-top:auto;
+    background:rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:14px;
+    font-size:12.5px;
+    color:#bcd6e8;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .side-footer strong{display:block;color:#fff;font-size:13px;margin-bottom:2px;}
+
+  /* ---------- MAIN ---------- */
+  .main{flex:1; padding:28px 34px 60px; max-width:1180px;}
+
+  .topbar{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    margin-bottom:22px; gap:20px; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:24px; color:var(--heading); margin-bottom:4px;}
+  .topbar p{margin:0; color:var(--muted); font-size:14px;}
+
+  .topbar-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+
+  .mode-toggle{
+    display:flex; background:var(--teal-light); border-radius:999px; padding:4px; gap:2px;
+    border:1px solid var(--border); height:fit-content;
+  }
+  .mode-toggle button{
+    border:none; background:transparent; padding:9px 18px; border-radius:999px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--muted);
+    cursor:pointer; transition:all .15s ease;
+  }
+  .mode-toggle button.active{background:var(--teal); color:#fff; box-shadow:var(--shadow);}
+
+  .theme-toggle{
+    display:flex; align-items:center; gap:8px;
+    background:var(--card); border:1px solid var(--border); border-radius:999px;
+    padding:6px 14px 6px 6px; height:fit-content; cursor:pointer;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:var(--text);
+    box-shadow:var(--shadow); transition:background .15s ease;
+  }
+  .theme-toggle .icon-dot{
+    width:26px; height:26px; border-radius:50%; background:var(--teal-light);
+    display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;
+  }
+
+  /* data table for writing task 1 */
+  .table-wrap{margin:4px 0 18px;}
+  .data-table{width:100%; border-collapse:collapse; font-size:13.5px; background:var(--card);}
+  .data-table caption{text-align:left; font-weight:700; color:var(--heading); margin-bottom:8px; font-size:14px;}
+  .data-table th,.data-table td{border:1px solid var(--border); padding:8px 10px; text-align:left;}
+  .data-table thead th{background:var(--teal-light); color:var(--teal-dark); font-weight:700;}
+  .data-table td:not(:first-child), .data-table th:not(:first-child){text-align:center;}
+
+  /* progress card */
+  .progress-card{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 22px; margin-bottom:24px; box-shadow:var(--shadow);
+  }
+  .progress-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+  .progress-top .label{font-weight:700; font-size:14px; color:var(--heading);}
+  .progress-top .count{font-size:13px; color:var(--muted);}
+  .progress-top .count b{color:var(--teal-dark);}
+  .bar-track{height:10px; background:var(--teal-light); border-radius:999px; overflow:hidden;}
+  .bar-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--teal),#17c2b3); border-radius:999px; transition:width .5s ease;}
+
+  /* module card */
+  .module{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:26px; margin-bottom:20px; box-shadow:var(--shadow); display:none;
+  }
+  .module.visible{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .module-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:10px;}
+  .module-head h2{font-size:20px; color:var(--heading);}
+  .module-tag{
+    font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+    background:var(--teal-light); color:var(--teal-dark); padding:5px 10px; border-radius:999px;
+  }
+  .module-sub{color:var(--muted); font-size:13.5px; margin:0 0 18px;}
+
+  .video-wrap{
+    position:relative; width:100%; padding-top:56.25%; border-radius:12px; overflow:hidden;
+    background:#0b2942; margin-bottom:18px; border:1px solid var(--border);
+  }
+  .video-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+
+  .info-box{
+    background:var(--teal-light); border:1px solid #c9ede8; border-radius:12px;
+    padding:16px 18px; margin-bottom:20px; font-size:14px; line-height:1.65; color:#0f4a44;
+  }
+  .info-box strong{color:var(--teal-dark);}
+  html[data-theme="dark"] .info-box{border-color:#1c4a44; color:#bfe9e2;}
+
+  .section-title{font-size:14px; font-weight:700; color:var(--heading); margin:22px 0 10px; display:flex; align-items:center; gap:8px;}
+  .section-title .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);}
+
+  /* buttons */
+  .btn{
+    border:none; border-radius:9px; padding:10px 18px; font-family:'Inter',sans-serif;
+    font-weight:600; font-size:13.5px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .1s ease, opacity .15s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-teal{background:var(--teal); color:#fff;}
+  .btn-teal:hover{background:var(--teal-dark);}
+  .btn-outline{background:var(--card); border:1px solid var(--border); color:var(--heading);}
+  html[data-theme="dark"] .btn-outline{color:var(--text);}
+  .btn-outline:hover{background:var(--teal-light);}
+  .btn-orange{background:var(--orange); color:#3a2a05;}
+  .btn-orange:hover{opacity:.9;}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  .row-between{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:16px;}
+
+  /* speaking practice */
+  .practice-box{
+    background:var(--card); border:1px dashed var(--border); border-radius:12px; padding:18px 20px;
+  }
+  .q-count{font-size:12px; color:var(--muted); font-weight:600; margin-bottom:6px;}
+  .q-text{font-size:16px; font-weight:600; color:var(--heading); line-height:1.5; min-height:50px;}
+  .q-hint{font-size:12.5px; color:var(--muted); margin-top:8px;}
+
+  /* listening / reading */
+  audio{width:100%; margin-bottom:16px;}
+  .passage{
+    background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px;
+    font-size:14px; line-height:1.75; color:var(--text); margin-bottom:18px; max-height:320px; overflow-y:auto;
+  }
+  .passage p{margin:0 0 12px;}
+  .passage p:last-child{margin-bottom:0;}
+
+  .quiz-q{margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border);}
+  .quiz-q:last-child{border-bottom:none;}
+  .quiz-q .qn{font-size:14px; font-weight:600; color:var(--heading); margin-bottom:8px;}
+  .options label{
+    display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--text);
+    padding:7px 10px; border-radius:8px; cursor:pointer; margin-bottom:2px;
+  }
+  .options label:hover{background:var(--teal-light);}
+  .fill-input{
+    width:160px; padding:8px 10px; border-radius:8px; border:1px solid var(--border);
+    font-family:'Inter',sans-serif; font-size:13.5px; background:var(--card); color:var(--text);
+  }
+  .result-box{
+    display:none; margin-top:16px; padding:14px 18px; border-radius:10px;
+    background:var(--teal-light); border:1px solid #c9ede8; color:var(--teal-dark);
+    font-weight:700; font-size:14.5px; align-items:center; gap:10px;
+  }
+  html[data-theme="dark"] .result-box{border-color:#1c4a44; color:#bfe9e2;}
+  .result-box.show{display:flex;}
+  .quiz-q.correct{background:var(--correct-bg);}
+  .quiz-q.incorrect{background:var(--incorrect-bg);}
+  .tag-correct, .tag-incorrect{font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:999px; margin-left:8px;}
+  .tag-correct{background:#dcf7e5; color:var(--success);}
+  .tag-incorrect{background:#fde3de; color:#c0392b;}
+
+  /* writing */
+  .prompt-box{
+    background:var(--orange-light); border:1px solid #f5d99a; border-radius:12px;
+    padding:16px 18px; margin-bottom:16px; font-size:14px; line-height:1.6; color:#6b4a06;
+  }
+  html[data-theme="dark"] .prompt-box{border-color:#5a4318; color:#f0d9a8;}
+  textarea{
+    width:100%; min-height:220px; border-radius:12px; border:1px solid var(--border);
+    padding:16px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:var(--text);
+    resize:vertical; background:var(--card);
+  }
+  textarea:focus{outline:2px solid var(--teal); outline-offset:1px;}
+  .word-count{font-size:12.5px; color:var(--muted); margin-top:8px;}
+
+  .complete-strip{
+    margin-top:24px; padding-top:20px; border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .complete-strip .done-note{font-size:13px; color:var(--success); font-weight:600; display:none; align-items:center; gap:6px;}
+  .complete-strip .done-note.show{display:flex;}
+
+  .nav-arrows{display:flex; gap:10px;}
+
+  @media (max-width:900px){
+    body{flex-direction:column;}
+    .sidebar{width:100%; height:auto; position:relative; flex-direction:row; overflow-x:auto; align-items:center;}
+    .sidebar .logo{border:none; margin:0; padding:4px 12px 4px 0;}
+    .nav-label{display:none;}
+    .side-footer{display:none;}
+    .nav-item{white-space:nowrap;}
+    .main{padding:20px;}
+  }
+
+  :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="cap">🎓</div>
+    <div class="name">IELTS VISION<span>ORIENTATION</span></div>
+  </div>
+
+  <div class="nav-label">Learning Path</div>
+  <nav id="navList"></nav>
+
+  <div class="side-footer">
+    🏆
+    <div><strong>Keep going!</strong>Finish every module to unlock your full orientation badge.</div>
+  </div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <h1>IELTS Orientation</h1>
+      <p>Work through each module in order. Your progress saves automatically as you complete them.</p>
+    </div>
+    <div class="topbar-actions">
+      <div class="mode-toggle" role="tablist" aria-label="IELTS format">
+        <button id="btnAcademic" class="active" onclick="setFormat('academic')">Academic</button>
+        <button id="btnGeneral" onclick="setFormat('general')">General Training</button>
+      </div>
+      <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle light or dark mode">
+        <span class="icon-dot" id="themeIcon">🌙</span><span id="themeLabel">Dark mode</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="progress-card">
+    <div class="progress-top">
+      <div class="label">Orientation Progress</div>
+      <div class="count"><b id="doneCount">0</b> / 7 modules completed</div>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+  </div>
+
+  <div id="modulesHost"></div>
+</main>
+
+<script>
+/* ============================================================
+   THEME (LIGHT / DARK)
+   ============================================================ */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  if(theme === 'dark'){ icon.textContent = '☀️'; label.textContent = 'Light mode'; }
+  else { icon.textContent = '🌙'; label.textContent = 'Dark mode'; }
+  try{ localStorage.setItem('ielts-vision-theme', theme); }catch(e){}
+}
+function toggleTheme(){
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+(function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem('ielts-vision-theme'); }catch(e){}
+  if(!saved){ saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  applyTheme(saved);
+})();
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const FORMAT = { current: 'academic' };
+
+const MODULES = [
+  { id:'basic', step:'Module 1', title:'Basic Idea About IELTS', tag:'Overview',
+    video:'https://www.youtube.com/embed/QOC-8jLNaaA',
+
+    info: {
+      academic: `
+        <h3>What is IELTS?</h3>
+        <p>🎓 <strong>IELTS (International English Language Testing System)</strong> is one of the world's most widely recognised English-language proficiency tests. It assesses a person's ability to <strong>listen, read, write and speak in English.</strong></p>
+
+        <h3>Who Should Take IELTS?</h3>
+        <p>IELTS is suitable for people who need to prove their English-language ability for:</p>
+
+        <ul>
+          <li>🎓 <strong>Studying abroad</strong> at universities and colleges</li>
+          <li>💼 <strong>Working overseas</strong> or applying for international employment</li>
+          <li>🛂 <strong>Immigration and permanent residency</strong></li>
+          <li>🏥 <strong>Professional registration</strong>, especially in fields such as nursing and healthcare</li>
+          <li>🌍 <strong>Visa applications</strong> in English-speaking countries</li>
+        </ul>
+
+        <p>📘 <strong>IELTS Academic</strong> is mainly designed for people who want to study at universities or colleges abroad and for professionals who need to prove their English proficiency for professional registration.</p>
+
+        <p>🚀 <strong>Choose IELTS to open doors to global education, career opportunities and migration.</strong></p>
+      `,
+
+      general: `
+        <h3>What is IELTS?</h3>
+        <p>🎓 <strong>IELTS (International English Language Testing System)</strong> is one of the world's most widely recognised English-language proficiency tests. It assesses a person's ability to <strong>listen, read, write and speak in English.</strong></p>
+
+        <h3>Who Should Take IELTS?</h3>
+        <p>IELTS is suitable for people who need to prove their English-language ability for:</p>
+
+        <ul>
+          <li>💼 <strong>Working overseas</strong> or applying for international employment</li>
+          <li>🛂 <strong>Immigration and permanent residency</strong></li>
+          <li>🏥 <strong>Professional registration</strong>, especially in fields such as nursing and healthcare</li>
+          <li>🌍 <strong>Visa applications</strong> in English-speaking countries</li>
+          <li>🎓 <strong>Studying or training</strong> in certain educational institutions</li>
+        </ul>
+
+        <p>📗 <strong>IELTS General Training</strong> is mainly designed for people who plan to migrate, work, gain professional experience or undertake other forms of training in an English-speaking country.</p>
+
+        <p>🚀 <strong>Choose IELTS to open doors to global career opportunities, migration and international experiences.</strong></p>
+      `
+    }
+  },
+
+  { id:'gi',      step:'Module 2', title:'General Instructions', tag:'Academic / General',
+    video:{ academic:'https://www.youtube.com/embed/w4LKkRsfKhg', general:'https://www.youtube.com/embed/3lA09ch_5rg' },
+    info:{ academic: `
+  <h3>📘 IELTS Academic — General Instructions</h3>
+
+  <p>
+    IELTS Academic is designed for people who want to study at a university or higher education institution in an English-speaking environment. It is also commonly taken by professionals who need to demonstrate their English proficiency for professional registration.
+  </p>
+
+  <h3>🎓 Who Should Take IELTS Academic?</h3>
+
+  <ul>
+    <li>🎓 Students applying for undergraduate or postgraduate study at universities and colleges.</li>
+    <li>🌍 Students planning to study in an English-speaking country.</li>
+    <li>🏥 Professionals, such as nurses, doctors and other healthcare workers, who need English-language certification for professional registration.</li>
+    <li>💼 Applicants whose university or professional body specifically requires an IELTS Academic score.</li>
+  </ul>
+
+  <h3>📝 The Four Sections of the Test</h3>
+
+  <p>
+    IELTS Academic assesses four English-language skills. The test is divided into four sections:
+  </p>
+
+  <ul>
+    <li>🎧 <strong>Listening:</strong> Approximately 30 minutes, followed by 10 minutes to transfer answers to the answer sheet.</li>
+    <li>📖 <strong>Reading:</strong> 60 minutes to answer 40 questions based on three academic passages.</li>
+    <li>✍️ <strong>Writing:</strong> 60 minutes and consists of two tasks.</li>
+    <li>🗣️ <strong>Speaking:</strong> 11–14 minutes and consists of a face-to-face interview with an examiner.</li>
+  </ul>
+
+  <h3>⏱️ Test Timing</h3>
+
+  <p>
+    The Listening, Reading and Writing tests are completed on the same day without breaks between them. Together, these three sections take approximately 2 hours and 40 minutes. The Speaking test may take place on the same day or on a different day, depending on the test centre's schedule.
+  </p>
+
+  <h3>📚 Academic Reading</h3>
+
+  <p>
+    The Academic Reading test contains three long passages taken from sources such as books, journals, magazines and newspapers. The texts are written for an educated, non-specialist audience and may include academic vocabulary and complex ideas.
+  </p>
+
+  <p>
+    You will answer <strong>40 questions</strong> in 60 minutes. Unlike the Listening test, there is no additional time to transfer answers, so answers must be written on the answer sheet within the 60-minute period.
+  </p>
+
+  <h3>📊 Academic Writing</h3>
+
+  <p>
+    Academic Writing consists of two tasks. In <strong>Task 1</strong>, you must describe visual information such as a graph, chart, table, process or map. You need to summarise the main features and make relevant comparisons.
+  </p>
+
+  <p>
+    In <strong>Task 2</strong>, you write an essay in response to a point of view, argument or problem. You should present a clear position, develop relevant ideas and support your arguments with explanations and examples.
+  </p>
+
+  <p>
+    ✍️ <strong>Task 2 carries twice as much weight as Task 1</strong> when calculating the Writing band score.
+  </p>
+
+  <h3>🗣️ Speaking Test</h3>
+
+  <p>
+    The Speaking test is a face-to-face interview with a certified IELTS examiner. It consists of three parts:
+  </p>
+
+  <ul>
+    <li>💬 <strong>Part 1:</strong> Introduction and questions about familiar topics.</li>
+    <li>📝 <strong>Part 2:</strong> A long turn where you speak about a given topic for up to two minutes.</li>
+    <li>🗣️ <strong>Part 3:</strong> A discussion involving more abstract questions related to Part 2.</li>
+  </ul>
+
+  <h3>⚖️ Academic vs General Training</h3>
+
+  <p>
+    The <strong>Listening and Speaking</strong> tests are the same in both IELTS Academic and General Training. The main differences are in the <strong>Reading and Writing</strong> sections.
+  </p>
+
+  <ul>
+    <li>📖 <strong>Academic Reading:</strong> Uses longer and more academic texts.</li>
+    <li>📰 <strong>General Training Reading:</strong> Uses everyday texts, advertisements, notices and workplace-related materials.</li>
+    <li>📊 <strong>Academic Writing Task 1:</strong> Describes graphs, charts, diagrams or maps.</li>
+    <li>✉️ <strong>General Training Writing Task 1:</strong> Requires writing a letter.</li>
+    <li>✍️ <strong>Task 2:</strong> Is an essay in both versions.</li>
+  </ul>
+
+  <h3>📈 Band Scores</h3>
+
+  <p>
+    Each section is scored from <strong>Band 0 to Band 9</strong>. You receive an individual score for Listening, Reading, Writing and Speaking, as well as an overall band score calculated from the four individual scores.
+  </p>
+
+  <p>
+    🎯 The required band score depends on the university, course, professional organisation or institution to which you are applying. Therefore, candidates should always check the specific English-language requirements of their target institution.
+  </p>
+
+  <p>
+    🚀 <strong>Remember: IELTS Academic is not simply a test of English grammar. It assesses how effectively you can understand and communicate information in academic and professional contexts.</strong>
+  </p>
+`,
+           general: `
+  <h3>📗 IELTS General Training — General Instructions</h3>
+
+  <p>
+    IELTS General Training is designed for people who need to demonstrate their English-language ability for practical, everyday and workplace-related purposes. It is commonly taken by individuals who plan to migrate to an English-speaking country, work or gain professional experience overseas, or undertake secondary education, vocational training or other forms of non-university education.
+  </p>
+
+  <h3>🌍 Who Should Take IELTS General Training?</h3>
+
+  <ul>
+    <li>🛂 People applying for migration or permanent residency in an English-speaking country.</li>
+    <li>💼 People who want to work or gain professional experience overseas.</li>
+    <li>🏫 Students planning to undertake secondary education or vocational training.</li>
+    <li>📚 People applying for training programmes that do not require an academic IELTS test.</li>
+    <li>🌏 Individuals who need to prove their practical English ability for immigration or employment purposes.</li>
+  </ul>
+
+  <h3>📝 The Four Sections of the Test</h3>
+
+  <p>
+    IELTS General Training assesses the same four fundamental English-language skills as IELTS Academic:
+  </p>
+
+  <ul>
+    <li>🎧 <strong>Listening:</strong> Approximately 30 minutes, followed by 10 minutes to transfer answers to the answer sheet.</li>
+    <li>📖 <strong>Reading:</strong> 60 minutes to answer 40 questions based on three sections of texts.</li>
+    <li>✍️ <strong>Writing:</strong> 60 minutes and consists of two tasks.</li>
+    <li>🗣️ <strong>Speaking:</strong> 11–14 minutes and consists of a face-to-face interview with an examiner.</li>
+  </ul>
+
+  <h3>⏱️ Test Timing</h3>
+
+  <p>
+    The Listening, Reading and Writing tests are normally completed on the same day. There are no scheduled breaks between these three sections, so candidates should be prepared to remain focused for approximately 2 hours and 40 minutes.
+  </p>
+
+  <p>
+    The Speaking test may take place on the same day as the other sections or on a different day, depending on the arrangements of the individual test centre.
+  </p>
+
+  <h3>🎧 General Training Listening</h3>
+
+  <p>
+    The Listening test is exactly the same in both IELTS Academic and IELTS General Training. Candidates listen to four recordings and answer a total of 40 questions.
+  </p>
+
+  <p>
+    The recordings include a mixture of conversations and monologues. The situations may be based on everyday social interactions, educational contexts or general discussions.
+  </p>
+
+  <p>
+    🎧 Each recording is played only once, and candidates must answer the questions while listening. Different accents may be used, so it is important to develop the ability to understand a range of English accents.
+  </p>
+
+  <h3>📖 General Training Reading</h3>
+
+  <p>
+    The General Training Reading test contains three sections and 40 questions. The texts are based mainly on everyday life, workplace situations and general-interest topics.
+  </p>
+
+  <ul>
+    <li>📄 <strong>Section 1:</strong> Contains short texts related to everyday life, such as notices, advertisements, timetables, signs and public information.</li>
+    <li>💼 <strong>Section 2:</strong> Focuses mainly on workplace-related texts, such as job descriptions, company policies, training materials and workplace information.</li>
+    <li>📰 <strong>Section 3:</strong> Contains a longer text on a general-interest topic. This section may contain more complex vocabulary and ideas.</li>
+  </ul>
+
+  <p>
+    ⏱️ Candidates have 60 minutes to complete all 40 questions. Unlike the Listening test, there is no additional time to transfer answers to the answer sheet.
+  </p>
+
+  <h3>✉️ General Training Writing</h3>
+
+  <p>
+    General Training Writing consists of two tasks. In <strong>Task 1</strong>, candidates are asked to write a letter in response to a particular situation.
+  </p>
+
+  <p>
+    The letter may be:
+  </p>
+
+  <ul>
+    <li>🏢 <strong>Formal:</strong> Written to someone the candidate does not know personally, such as a manager, company or organisation.</li>
+    <li>🤝 <strong>Semi-formal:</strong> Written to someone the candidate knows, but with whom a formal relationship exists.</li>
+    <li>💬 <strong>Informal:</strong> Written to a friend, family member or someone the candidate knows well.</li>
+  </ul>
+
+  <p>
+    ✍️ The task usually provides a situation and three bullet points explaining what information should be included in the letter. Candidates should address all the bullet points clearly and use an appropriate tone and level of formality.
+  </p>
+
+  <p>
+    In <strong>Task 2</strong>, candidates write an essay in response to a point of view, argument or problem. The essay should have a clear position, logically organised ideas, explanations and relevant examples.
+  </p>
+
+  <p>
+    🎯 <strong>Task 2 carries twice as much weight as Task 1</strong> when calculating the overall Writing band score.
+  </p>
+
+  <h3>🗣️ Speaking Test</h3>
+
+  <p>
+    The Speaking test is exactly the same for IELTS Academic and General Training. It is a face-to-face interview with a certified IELTS examiner and consists of three parts:
+  </p>
+
+  <ul>
+    <li>💬 <strong>Part 1:</strong> The examiner asks questions about familiar topics, such as home, work, studies, family, hobbies and daily life.</li>
+    <li>📝 <strong>Part 2:</strong> The candidate receives a topic card, has a short time to prepare and then speaks for up to two minutes.</li>
+    <li>🗣️ <strong>Part 3:</strong> The examiner asks more detailed and abstract questions related to the topic discussed in Part 2.</li>
+  </ul>
+
+  <h3>⚖️ General Training vs Academic</h3>
+
+  <p>
+    IELTS Academic and IELTS General Training assess the same four skills. However, the main differences are found in the <strong>Reading and Writing</strong> sections.
+  </p>
+
+  <ul>
+    <li>🎧 <strong>Listening:</strong> The same in both versions.</li>
+    <li>🗣️ <strong>Speaking:</strong> The same in both versions.</li>
+    <li>📖 <strong>Academic Reading:</strong> Uses longer texts from books, journals, magazines and other academic sources.</li>
+    <li>📰 <strong>General Training Reading:</strong> Uses everyday, workplace and general-interest texts.</li>
+    <li>📊 <strong>Academic Writing Task 1:</strong> Requires candidates to describe visual information such as graphs, charts, tables, maps or processes.</li>
+    <li>✉️ <strong>General Training Writing Task 1:</strong> Requires candidates to write a letter based on a particular situation.</li>
+    <li>✍️ <strong>Task 2:</strong> Is an essay in both versions of the test.</li>
+  </ul>
+
+  <h3>📈 Band Scores</h3>
+
+  <p>
+    Each section of IELTS is scored on a scale from <strong>Band 0 to Band 9</strong>. Candidates receive separate scores for Listening, Reading, Writing and Speaking, as well as an overall band score calculated from the four individual scores.
+  </p>
+
+  <p>
+    🎯 The required score depends on the organisation, employer, immigration authority or institution to which you are applying. Therefore, candidates should always check the exact English-language requirements for their specific purpose.
+  </p>
+
+  <h3>🚨 Important: Choose the Correct Test</h3>
+
+  <p>
+    Choosing the correct IELTS test is extremely important. A person applying to a university may need <strong>IELTS Academic</strong>, while someone applying for migration or certain work-related purposes may need <strong>IELTS General Training</strong>.
+  </p>
+
+  <p>
+    ⚠️ The required test type depends on the specific requirements of the university, employer, immigration authority or professional organisation. Always check the official requirements before booking your test.
+  </p>
+
+  <p>
+    🚀 <strong>Remember: IELTS General Training focuses more on the practical English skills needed for everyday life, work, migration and non-university education.</strong>
+  </p>
+`} },
+
+  { id:'speaking',type:'speaking', step:'Module 3', title:'Speaking', tag:'Skill',
+    video:'https://www.youtube.com/embed/n422sZxoyV8',
+    info: {
+  academic: `
+    <h3>🗣️ IELTS Academic Speaking Test</h3>
+
+    <p>
+      The IELTS Speaking test assesses your ability to communicate effectively in spoken English. It is a face-to-face interview with a certified IELTS examiner and is designed to evaluate how naturally and clearly you can express your ideas in English.
+    </p>
+
+    <p>
+      📌 <strong>Important:</strong> The Speaking test is exactly the same for IELTS Academic and IELTS General Training. The topics and questions are not specifically academic or general-training based.
+    </p>
+
+    <h3>⏱️ Test Duration</h3>
+
+    <p>
+      The Speaking test lasts approximately <strong>11 to 14 minutes</strong> and consists of three parts. The examiner controls the timing and asks questions according to the official test format.
+    </p>
+
+    <h3>💬 Part 1 — Introduction and Interview</h3>
+
+    <p>
+      Part 1 lasts approximately <strong>4 to 5 minutes</strong>. The examiner introduces themselves, confirms your identity and asks questions about familiar topics.
+    </p>
+
+    <p>Common topics may include:</p>
+
+    <ul>
+      <li>🏠 Your home and hometown</li>
+      <li>🎓 Your studies or work</li>
+      <li>👨‍👩‍👧‍👦 Your family and friends</li>
+      <li>🎨 Hobbies and interests</li>
+      <li>📚 Books and learning</li>
+      <li>🌍 Travel and holidays</li>
+      <li>💻 Technology</li>
+      <li>🍽️ Food and cooking</li>
+      <li>🏃 Sports and exercise</li>
+      <li>🎵 Music and entertainment</li>
+    </ul>
+
+    <p>
+      🎯 The purpose of Part 1 is to assess how comfortably you can talk about familiar, everyday topics. You should answer naturally and avoid giving only one-word answers.
+    </p>
+
+    <p>
+      💡 <strong>Tip:</strong> Try to give a direct answer followed by a reason, explanation or example. However, avoid memorising long answers because the examiner may ask follow-up questions.
+    </p>
+
+    <h3>📝 Part 2 — Individual Long Turn</h3>
+
+    <p>
+      Part 2 is commonly known as the <strong>cue card</strong> or <strong>long turn</strong>. You will receive a topic card containing a main topic and several bullet points.
+    </p>
+
+    <p>
+      ⏳ You will have <strong>one minute to prepare</strong>. You may make notes using a pencil and paper provided by the examiner. You will then be asked to speak about the topic for approximately <strong>1 to 2 minutes</strong>.
+    </p>
+
+    <p>
+      The examiner will stop you when the time is over. You do not need to continue speaking after the examiner tells you to stop.
+    </p>
+
+    <p>🎤 A cue card may ask you to describe:</p>
+
+    <ul>
+      <li>👤 A person</li>
+      <li>📍 A place</li>
+      <li>🎁 An object or possession</li>
+      <li>🎉 An event or experience</li>
+      <li>💭 An opinion or decision</li>
+      <li>📚 A skill or activity</li>
+    </ul>
+
+    <p>
+      🧠 <strong>Useful strategy:</strong> Use the bullet points on the cue card as a guide, but do not treat them as separate questions that require short answers. Try to connect your ideas into a continuous and organised speech.
+    </p>
+
+    <h3>🗣️ Part 3 — Two-Way Discussion</h3>
+
+    <p>
+      Part 3 lasts approximately <strong>4 to 5 minutes</strong>. The examiner asks more detailed questions related to the topic discussed in Part 2.
+    </p>
+
+    <p>
+      Unlike Part 1, the questions in Part 3 are usually more abstract and require you to discuss ideas, explain opinions, compare situations and analyse broader issues.
+    </p>
+
+    <p>Examples of questions may ask you to:</p>
+
+    <ul>
+      <li>⚖️ Compare the past and the present</li>
+      <li>🔮 Discuss future developments</li>
+      <li>🏛️ Explain the role of governments or society</li>
+      <li>📈 Discuss advantages and disadvantages</li>
+      <li>💭 Give and justify your opinion</li>
+      <li>🔍 Explain causes and effects</li>
+    </ul>
+
+    <p>
+      🎯 <strong>Tip:</strong> In Part 3, develop your answers. A useful structure is:
+    </p>
+
+    <p>
+      <strong>Opinion → Explanation → Example → Result or consequence</strong>
+    </p>
+
+    <h3>📊 How Is Speaking Scored?</h3>
+
+    <p>
+      Your performance is assessed using four equally important criteria:
+    </p>
+
+    <ul>
+      <li>🗣️ <strong>Fluency and Coherence:</strong> Your ability to speak smoothly, organise your ideas and connect your speech logically.</li>
+      <li>📚 <strong>Lexical Resource:</strong> The range and accuracy of the vocabulary you use.</li>
+      <li>🔤 <strong>Grammatical Range and Accuracy:</strong> Your ability to use a variety of grammatical structures accurately.</li>
+      <li>🎧 <strong>Pronunciation:</strong> How clearly and effectively you pronounce words and communicate your message.</li>
+    </ul>
+
+    <p>
+      📈 Each criterion contributes equally to your final Speaking band score, which ranges from <strong>Band 0 to Band 9</strong>.
+    </p>
+
+    <h3>⚖️ Academic vs General Training Speaking</h3>
+
+    <p>
+      There is <strong>no difference</strong> between the Speaking test in IELTS Academic and IELTS General Training.
+    </p>
+
+    <ul>
+      <li>🗣️ Same three-part test structure</li>
+      <li>⏱️ Same approximate test duration</li>
+      <li>📝 Same type of Part 2 cue card</li>
+      <li>💬 Same style of Part 1 interview</li>
+      <li>🧠 Same style of Part 3 discussion</li>
+      <li>📊 Same assessment criteria and band descriptors</li>
+    </ul>
+
+    <p>
+      🚀 <strong>Remember: IELTS Speaking is not a test of memorised answers. The examiner wants to see how naturally, clearly and effectively you can communicate your ideas in English.</strong>
+    </p>
+  `,
+
+  general: `
+    <h3>🗣️ IELTS General Training Speaking Test</h3>
+
+    <p>
+      The IELTS Speaking test assesses your ability to communicate effectively in spoken English. It is a face-to-face interview with a certified IELTS examiner and is designed to evaluate how naturally and clearly you can express your ideas in English.
+    </p>
+
+    <p>
+      📌 <strong>Important:</strong> The Speaking test is exactly the same for IELTS General Training and IELTS Academic. The test is not specifically focused on migration, work or academic topics.
+    </p>
+
+    <h3>⏱️ Test Duration</h3>
+
+    <p>
+      The Speaking test lasts approximately <strong>11 to 14 minutes</strong> and consists of three parts. The examiner controls the timing and guides you through each section of the test.
+    </p>
+
+    <h3>💬 Part 1 — Introduction and Interview</h3>
+
+    <p>
+      Part 1 lasts approximately <strong>4 to 5 minutes</strong>. After introducing themselves and checking your identity, the examiner asks questions about familiar topics from everyday life.
+    </p>
+
+    <p>Common topics may include:</p>
+
+    <ul>
+      <li>🏠 Your home and hometown</li>
+      <li>💼 Your job or studies</li>
+      <li>👨‍👩‍👧‍👦 Family and friends</li>
+      <li>🎨 Hobbies and interests</li>
+      <li>🛍️ Shopping</li>
+      <li>🍽️ Food and cooking</li>
+      <li>🌍 Travel and holidays</li>
+      <li>💻 Technology</li>
+      <li>🏃 Sports and exercise</li>
+      <li>🎵 Music and entertainment</li>
+    </ul>
+
+    <p>
+      🎯 The aim is to see how naturally you can communicate about familiar topics. Try to answer with enough detail to demonstrate your English ability.
+    </p>
+
+    <p>
+      💡 <strong>Tip:</strong> Give a direct answer and then extend it with a reason, explanation or example. Avoid giving memorised answers or extremely short responses.
+    </p>
+
+    <h3>📝 Part 2 — Individual Long Turn</h3>
+
+    <p>
+      Part 2 is known as the <strong>cue card</strong> or <strong>long turn</strong>. You will receive a topic card with a main topic and several points to help you organise your answer.
+    </p>
+
+    <p>
+      ⏳ You will have <strong>one minute to prepare</strong> and make notes. You will then speak about the topic for approximately <strong>1 to 2 minutes</strong>.
+    </p>
+
+    <p>
+      The examiner may stop you when the time is over. This is normal and does not necessarily mean that you performed poorly.
+    </p>
+
+    <p>🎤 Possible topics may ask you to describe:</p>
+
+    <ul>
+      <li>👤 A person you know</li>
+      <li>📍 A place you have visited</li>
+      <li>🎁 Something important to you</li>
+      <li>🎉 An interesting experience</li>
+      <li>💭 A decision you made</li>
+      <li>📚 A skill you would like to learn</li>
+    </ul>
+
+    <p>
+      🧠 <strong>Useful strategy:</strong> Use the bullet points to organise your speech, but try to speak continuously rather than answering each point as if it were a separate short question.
+    </p>
+
+    <h3>🗣️ Part 3 — Two-Way Discussion</h3>
+
+    <p>
+      Part 3 lasts approximately <strong>4 to 5 minutes</strong>. The examiner asks broader questions connected to the topic from Part 2.
+    </p>
+
+    <p>
+      The questions become more abstract and may require you to discuss society, changing lifestyles, technology, education, work or other broader issues.
+    </p>
+
+    <p>In this part, you may be asked to:</p>
+
+    <ul>
+      <li>⚖️ Compare different situations</li>
+      <li>🔍 Explain causes and effects</li>
+      <li>📈 Discuss advantages and disadvantages</li>
+      <li>🔮 Predict future developments</li>
+      <li>💭 Give and justify your opinion</li>
+      <li>🏛️ Discuss the role of governments and society</li>
+    </ul>
+
+    <p>
+      🎯 <strong>Tip:</strong> Develop your answers using this structure:
+    </p>
+
+    <p>
+      <strong>Opinion → Explanation → Example → Result or consequence</strong>
+    </p>
+
+    <h3>📊 How Is Speaking Scored?</h3>
+
+    <p>
+      Your Speaking performance is assessed using four equally important criteria:
+    </p>
+
+    <ul>
+      <li>🗣️ <strong>Fluency and Coherence:</strong> How smoothly you speak and how logically you organise your ideas.</li>
+      <li>📚 <strong>Lexical Resource:</strong> The range, flexibility and accuracy of your vocabulary.</li>
+      <li>🔤 <strong>Grammatical Range and Accuracy:</strong> The variety and accuracy of the grammatical structures you use.</li>
+      <li>🎧 <strong>Pronunciation:</strong> How clearly you pronounce words and communicate your message.</li>
+    </ul>
+
+    <p>
+      📈 Your final Speaking score ranges from <strong>Band 0 to Band 9</strong>.
+    </p>
+
+    <h3>⚖️ General Training vs Academic Speaking</h3>
+
+    <p>
+      There is <strong>no difference</strong> between the Speaking test in IELTS General Training and IELTS Academic.
+    </p>
+
+    <ul>
+      <li>🗣️ Same three-part structure</li>
+      <li>⏱️ Same approximate duration</li>
+      <li>📝 Same cue-card format</li>
+      <li>💬 Same Part 1 interview format</li>
+      <li>🧠 Same Part 3 discussion format</li>
+      <li>📊 Same scoring criteria</li>
+    </ul>
+
+    <p>
+      🚀 <strong>Remember: The purpose of the Speaking test is to assess your real communication ability. Focus on expressing your ideas clearly and naturally instead of memorising complete answers.</strong>
+    </p>
+  `
+},
+    questions:{
+  academic:[
+    "Part 1: Can you describe the town or city where you live?",
+    "Part 1: Do you work or are you a student?",
+
+    `Part 2 (Cue Card):
+Describe a time you spent a lot of money on something.
+
+You should say:
+• what you bought
+• when you bought it
+• where you bought it
+
+and explain why you spent a lot of money to buy it.`,
+
+    "Part 3: Why do you think some people enjoy spending large amounts of money on expensive products?",
+    "Part 3: Do you think people today spend more money than people did in the past?",
+    "Part 3: What are the advantages and disadvantages of buying expensive products?"
+  ],
+
+  general:[
+    "Part 1: Can you describe the town or city where you live?",
+    "Part 1: Do you work or are you a student?",
+
+    `Part 2 (Cue Card):
+Describe a skill you would like to learn.
+
+You should say:
+• what it is
+• why you want to learn it
+• how you would learn it
+
+and explain how it would help you.`,
+
+    "Part 3: Why do you think it is important for adults to continue learning new skills?",
+    "Part 3: Do you think technology has made it easier for people to learn new skills?",
+    "Part 3: Should schools focus more on practical skills or academic knowledge?"
+  ]
+} },
+
+  { id:'listening',type:'listening', step:'Module 4', title:'Listening', tag:'Skill',
+    video:'https://www.youtube.com/embed/AhYS5n3wlQY',
+    info:{
+      academic:`
+        <h3>🎧 IELTS Listening Test</h3>
+
+        <p>
+          The IELTS Listening test assesses your ability to understand spoken English in a variety of everyday, educational and social situations. You will listen to four recordings and answer questions based on the information you hear.
+        </p>
+      
+        <p>
+          📌 <strong>Important:</strong> The Listening test is exactly the same for both IELTS Academic and IELTS General Training.
+        </p>
+      
+        <h3>⏱️ Test Duration</h3>
+      
+        <p>
+          The Listening test takes approximately <strong>30 minutes</strong>. During the test, you will listen to four recordings and answer a total of <strong>40 questions</strong>.
+        </p>
+      
+        <p>
+          📝 In the paper-based test, you are given an additional <strong>10 minutes</strong> at the end to transfer your answers from the question paper to the answer sheet.
+        </p>
+      
+        <p>
+          💻 In the computer-delivered test, you enter your answers directly on the computer and receive a short period of time to check your answers at the end.
+        </p>
+      
+        <h3>🎙️ The Four Parts of the Listening Test</h3>
+      
+        <p>
+          The test contains four sections. Each section becomes progressively more challenging.
+        </p>
+      
+        <h3>🗣️ Part 1 — Everyday Social Conversation</h3>
+      
+        <p>
+          In Part 1, you listen to a conversation between two speakers in an everyday social situation.
+        </p>
+      
+        <p>Examples may include:</p>
+      
+        <ul>
+          <li>🏠 Renting accommodation</li>
+          <li>📞 Making an enquiry</li>
+          <li>📝 Registering for a service</li>
+          <li>🎫 Booking tickets</li>
+          <li>📅 Arranging an appointment</li>
+        </ul>
+      
+        <p>
+          🎯 This section usually focuses on specific information such as names, dates, times, addresses, prices and telephone numbers.
+        </p>
+      
+        <h3>🎓 Part 2 — Everyday Social Monologue</h3>
+      
+        <p>
+          In Part 2, you listen to one speaker talking about a general everyday topic.
+        </p>
+      
+        <p>For example, the speaker might discuss:</p>
+      
+        <ul>
+          <li>🏛️ A public facility</li>
+          <li>🌳 A local tourist attraction</li>
+          <li>🏢 A community event</li>
+          <li>📍 A tour of a building or location</li>
+          <li>📢 Information about a service</li>
+        </ul>
+      
+        <p>
+          Unlike Part 1, there is only one speaker. You need to follow the speaker's explanation and identify important details and changes in information.
+        </p>
+      
+        <h3>👥 Part 3 — Educational or Training Conversation</h3>
+      
+        <p>
+          In Part 3, you listen to a conversation between two or more speakers. The situation is usually related to education or training.
+        </p>
+      
+        <p>For example:</p>
+      
+        <ul>
+          <li>🎓 Students discussing a project</li>
+          <li>👨‍🏫 A student speaking with a tutor</li>
+          <li>📚 Students discussing an assignment</li>
+          <li>🔬 A discussion about research</li>
+        </ul>
+      
+        <p>
+          🧠 This section can be more challenging because you may need to follow different opinions, understand changes in ideas and identify who says what.
+        </p>
+      
+        <h3>🎤 Part 4 — Academic Monologue</h3>
+      
+        <p>
+          Part 4 is a monologue on an academic or educational topic. One speaker gives a talk or lecture.
+        </p>
+      
+        <p>
+          This is often considered the most challenging section because:
+        </p>
+      
+        <ul>
+          <li>📚 The topic may be unfamiliar.</li>
+          <li>🧠 The vocabulary may be more complex.</li>
+          <li>🎤 There is only one speaker.</li>
+          <li>⚡ The speaker usually continues without a break.</li>
+          <li>🔗 You need to follow the organisation of a longer talk.</li>
+        </ul>
+      
+        <h3>📝 Types of Questions</h3>
+      
+        <p>
+          The Listening test may include several different question types:
+        </p>
+      
+        <ul>
+          <li>✍️ <strong>Form, note, table or summary completion</strong></li>
+          <li>🗺️ <strong>Map or plan labelling</strong></li>
+          <li>🔢 <strong>Multiple choice questions</strong></li>
+          <li>🔗 <strong>Matching information</strong></li>
+          <li>📊 <strong>Diagram labelling</strong></li>
+          <li>❓ <strong>Sentence completion</strong></li>
+        </ul>
+      
+        <h3>⚠️ Important Listening Rules</h3>
+      
+        <ul>
+          <li>🎧 You hear each recording <strong>only once</strong>.</li>
+          <li>👀 You can read the questions before listening to the relevant section.</li>
+          <li>✍️ Follow the instructions carefully, especially the word limit.</li>
+          <li>🔤 Spelling is important. Incorrect spelling can result in an incorrect answer.</li>
+          <li>🔢 Numbers, dates, names and singular/plural forms must be written accurately.</li>
+          <li>⏭️ If you miss an answer, move on quickly and continue listening.</li>
+        </ul>
+      
+        <h3>🌍 Different English Accents</h3>
+      
+        <p>
+          You may hear a variety of English accents in the Listening test, including British, Australian, New Zealand, North American and other accents.
+        </p>
+      
+        <p>
+          🎯 Therefore, IELTS preparation should include listening to different varieties of English rather than focusing on only one accent.
+        </p>
+      
+        <h3>📈 Listening Band Score</h3>
+      
+        <p>
+          You receive one mark for each correct answer. There are <strong>40 questions</strong> in total. Your raw score is converted into an IELTS Listening band score from <strong>Band 0 to Band 9</strong>.
+        </p>
+      
+        <p>
+          🚀 <strong>Remember: IELTS Listening tests your ability to understand key information, specific details, opinions, attitudes and the overall meaning of spoken English.</strong>
+        </p>
+      `,
+      
+      general:`
+        <h3>🎧 IELTS Listening Test</h3>
+      
+        <p>
+          The IELTS Listening test assesses your ability to understand spoken English in a variety of everyday, educational and social situations. You will listen to four recordings and answer questions based on the information you hear.
+        </p>
+      
+        <p>
+          📌 <strong>Important:</strong> The Listening test is exactly the same for both IELTS General Training and IELTS Academic.
+        </p>
+      
+        <h3>⏱️ Test Duration</h3>
+      
+        <p>
+          The Listening test takes approximately <strong>30 minutes</strong>. You will listen to four recordings and answer a total of <strong>40 questions</strong>.
+        </p>
+      
+        <p>
+          📝 In the paper-based test, you receive an additional <strong>10 minutes</strong> to transfer your answers to the answer sheet.
+        </p>
+      
+        <p>
+          💻 In the computer-delivered test, you enter your answers directly on the computer and receive a short period of time to check your answers at the end.
+        </p>
+      
+        <h3>🎙️ The Four Parts of the Listening Test</h3>
+      
+        <p>
+          The Listening test consists of four sections. The recordings gradually become more challenging.
+        </p>
+      
+        <h3>🗣️ Part 1 — Everyday Social Conversation</h3>
+      
+        <p>
+          You listen to a conversation between two speakers in an everyday social situation.
+        </p>
+      
+        <p>Examples include:</p>
+      
+        <ul>
+          <li>🏠 Enquiring about accommodation</li>
+          <li>📞 Asking for information</li>
+          <li>📝 Registering for a service</li>
+          <li>🎫 Booking an event or activity</li>
+          <li>📅 Arranging an appointment</li>
+        </ul>
+      
+        <p>
+          🎯 You may need to identify specific information such as names, dates, times, prices, addresses and telephone numbers.
+        </p>
+      
+        <h3>🎤 Part 2 — Everyday Social Monologue</h3>
+      
+        <p>
+          You listen to one speaker talking about a general everyday topic.
+        </p>
+      
+        <p>Possible topics include:</p>
+      
+        <ul>
+          <li>🏛️ A public facility</li>
+          <li>🌳 A local attraction</li>
+          <li>🏢 A community event</li>
+          <li>📍 A tour of a place</li>
+          <li>📢 Information about a service</li>
+        </ul>
+      
+        <p>
+          You need to follow the speaker's explanation and identify important information, directions, changes and details.
+        </p>
+      
+        <h3>👥 Part 3 — Educational or Training Conversation</h3>
+      
+        <p>
+          You listen to a conversation between two or more speakers in an educational or training context.
+        </p>
+      
+        <p>Examples include:</p>
+      
+        <ul>
+          <li>🎓 Students discussing a project</li>
+          <li>👨‍🏫 A student speaking with a tutor</li>
+          <li>📚 Students discussing an assignment</li>
+          <li>🔬 A conversation about research or training</li>
+        </ul>
+      
+        <p>
+          🧠 This section may be challenging because you need to follow different speakers and understand their opinions and ideas.
+        </p>
+      
+        <h3>🎓 Part 4 — Academic Monologue</h3>
+      
+        <p>
+          One speaker gives a talk or lecture on an academic or educational topic. This is often considered the most challenging section of the Listening test.
+        </p>
+      
+        <p>
+          It can be difficult because:
+        </p>
+      
+        <ul>
+          <li>📚 The topic may be unfamiliar.</li>
+          <li>🧠 The vocabulary may be more complex.</li>
+          <li>🎤 There is only one speaker.</li>
+          <li>⚡ The speaker usually speaks continuously.</li>
+          <li>🔗 You need to follow the structure of a longer talk.</li>
+        </ul>
+      
+        <h3>📝 Types of Questions</h3>
+      
+        <p>
+          You may encounter several question types, including:
+        </p>
+      
+        <ul>
+          <li>✍️ <strong>Form, note, table or summary completion</strong></li>
+          <li>🗺️ <strong>Map or plan labelling</strong></li>
+          <li>🔢 <strong>Multiple choice questions</strong></li>
+          <li>🔗 <strong>Matching information</strong></li>
+          <li>📊 <strong>Diagram labelling</strong></li>
+          <li>❓ <strong>Sentence completion</strong></li>
+        </ul>
+      
+        <h3>⚠️ Important Listening Rules</h3>
+      
+        <ul>
+          <li>🎧 Each recording is played <strong>only once</strong>.</li>
+          <li>👀 Use the time before each section to read the questions.</li>
+          <li>✍️ Follow the word-limit instructions carefully.</li>
+          <li>🔤 Spelling must be accurate.</li>
+          <li>🔢 Pay attention to numbers, dates, names and singular/plural forms.</li>
+          <li>⏭️ If you miss an answer, move on quickly instead of losing the next answer.</li>
+        </ul>
+      
+        <h3>🌍 Different English Accents</h3>
+      
+        <p>
+          The Listening test may include different English accents, including British, Australian, New Zealand, North American and other accents.
+        </p>
+      
+        <p>
+          🎯 Regularly listening to a variety of English accents can help you become more comfortable with different pronunciations and speaking styles.
+        </p>
+      
+        <h3>📈 Listening Band Score</h3>
+      
+        <p>
+          There are <strong>40 questions</strong>, and you receive one mark for each correct answer. Your raw score is converted into an IELTS Listening band score from <strong>Band 0 to Band 9</strong>.
+        </p>
+      
+        <p>
+          🚀 <strong>Remember: The IELTS Listening test is exactly the same for Academic and General Training. Your success depends on your ability to understand spoken English, identify important information and follow the development of ideas.</strong>
+        </p>
+      `
+    },
+    audio:'SHORT_STORY_COMPETITION.mp3',
+    quiz:[
+      { q:'Length of story: approximately ______ words.', type:'text', answer:'3000', accept:['3000','three thousand','3,000'] },
+      { q:'Story must include: a ______ .', type:'text', answer:'surprising ending', accept:['surprising ending','surprise ending','surprise'] },
+      { q:'Minimum age: ______ .', type:'text', answer:'16', accept:['16','sixteen'] },
+      { q:'Last entry date: 1st ______ .', type:'text', answer:'August', accept:['august'] },
+      { q:'Web address: www. ______ .com', type:'text', answer:'COMPASS', accept:['compass'] },
+      { q:'Don\u2019t: ______ the story to the organisers.', type:'text', answer:'post', accept:['post'] },
+      { q:'The competition is judged by ______ .', type:'text', answer:'famous authors', accept:['famous authors','published authors'] },
+      { q:'The top five stories will be available ______ .', type:'text', answer:'online', accept:['online'] },
+      { q:'The top story will be chosen by the ______ .', type:'text', answer:'public', accept:['public'] },
+      { q:'The first prize is a place at a writers\u2019 workshop in ______ .', type:'text', answer:'Spain', accept:['spain'] }
+    ] },
+
+  { id:'reading', type:'reading', step:'Module 5', title:'Reading', tag:'Skill',
+    video:'https://www.youtube.com/embed/PDMgCtFxARA',
+    info:{
+      academic:`
+        <h3>📖 IELTS Academic Reading Test</h3>
+
+        <p>
+          The IELTS Academic Reading test assesses your ability to understand and analyse written English in an academic and educational context. It is designed for people who plan to study at undergraduate or postgraduate level, or for professionals who need to demonstrate their English proficiency for registration or professional purposes.
+        </p>
+
+        <p>
+          📚 The texts are taken from sources such as books, academic journals, magazines, newspapers and online resources. Although you do not need specialist knowledge of the subject, you need to understand complex ideas, arguments and detailed information.
+        </p>
+
+        <h3>⏱️ Test Duration</h3>
+
+        <p>
+          You have <strong>60 minutes</strong> to complete the Reading test.
+        </p>
+
+        <p>
+          📌 The test contains <strong>40 questions</strong> based on three long reading passages.
+        </p>
+
+        <p>
+          ⚠️ Unlike the paper-based Listening test, you do not receive an additional 10 minutes to transfer your answers. Therefore, you must write your answers on the answer sheet within the 60-minute test period.
+        </p>
+
+        <h3>📄 The Three Reading Passages</h3>
+
+        <p>
+          The Academic Reading test contains three long texts. The difficulty generally increases as you progress through the test.
+        </p>
+
+        <h3>📘 Passage 1 — Understanding Main Ideas and Details</h3>
+
+        <p>
+          The first passage is usually the easiest of the three. It may discuss a scientific, historical, environmental, social or technological topic.
+        </p>
+
+        <p>
+          You may need to identify:
+        </p>
+
+        <ul>
+          <li>🔍 Specific information</li>
+          <li>💡 Main ideas</li>
+          <li>📊 Supporting details</li>
+          <li>🔗 Relationships between ideas</li>
+          <li>📝 The meaning of words in context</li>
+        </ul>
+
+        <h3>📗 Passage 2 — Understanding Arguments and Opinions</h3>
+
+        <p>
+          The second passage is usually more complex. It may contain different viewpoints, arguments, research findings or explanations of a process.
+        </p>
+
+        <p>
+          You may need to identify:
+        </p>
+
+        <ul>
+          <li>🧠 The writer's main argument</li>
+          <li>⚖️ Different opinions</li>
+          <li>🔄 Causes and effects</li>
+          <li>📈 Changes and developments</li>
+          <li>🔗 How paragraphs are connected</li>
+        </ul>
+
+        <h3>📕 Passage 3 — Complex Academic Text</h3>
+
+        <p>
+          The third passage is often the most challenging. It may contain complex arguments, unfamiliar topics, advanced vocabulary and multiple viewpoints.
+        </p>
+
+        <p>
+          You may need to:
+        </p>
+
+        <ul>
+          <li>🧩 Understand complex arguments</li>
+          <li>🎯 Identify the writer's opinions and attitudes</li>
+          <li>🔍 Locate detailed information</li>
+          <li>🔗 Understand relationships between ideas</li>
+          <li>📚 Interpret information from different parts of the passage</li>
+        </ul>
+
+        <h3>📝 Common Question Types</h3>
+
+        <p>
+          The Academic Reading test can include several different question types:
+        </p>
+
+        <ul>
+          <li>🔢 <strong>Multiple Choice</strong></li>
+          <li>✅ <strong>True / False / Not Given</strong></li>
+          <li>💭 <strong>Yes / No / Not Given</strong></li>
+          <li>🔗 <strong>Matching Information</strong></li>
+          <li>📌 <strong>Matching Headings</strong></li>
+          <li>👤 <strong>Matching Features</strong></li>
+          <li>✍️ <strong>Sentence Completion</strong></li>
+          <li>📋 <strong>Summary, Note, Table or Flow-chart Completion</strong></li>
+          <li>🏷️ <strong>Diagram Label Completion</strong></li>
+        </ul>
+
+        <h3>⚠️ Important Reading Rules</h3>
+
+        <ul>
+          <li>⏱️ You have only <strong>60 minutes</strong> for the entire test.</li>
+          <li>📖 You do not need to read every word in detail.</li>
+          <li>🔍 Learn to scan the text for names, dates, numbers and keywords.</li>
+          <li>🧠 Use skimming to understand the general meaning of a passage.</li>
+          <li>✍️ Follow the word limit carefully in completion questions.</li>
+          <li>🔤 Spelling must be accurate.</li>
+          <li>🔄 The answers generally follow the order of the information in the passage, but this is not true for every question type.</li>
+        </ul>
+
+        <h3>🎯 Important Skills for Academic Reading</h3>
+
+        <ul>
+          <li>🔎 <strong>Skimming:</strong> Reading quickly to understand the general idea.</li>
+          <li>🎯 <strong>Scanning:</strong> Searching quickly for specific information.</li>
+          <li>🧠 <strong>Understanding paraphrasing:</strong> Recognising that the question and passage may use different words with the same meaning.</li>
+          <li>🔗 <strong>Understanding cohesion:</strong> Following how ideas are connected throughout the passage.</li>
+          <li>📚 <strong>Vocabulary in context:</strong> Understanding words based on the surrounding information.</li>
+        </ul>
+
+        <h3>📈 Academic Reading Band Score</h3>
+
+        <p>
+          You receive one mark for each correct answer. There are <strong>40 questions</strong> in total. Your raw score is converted into an IELTS Reading band score from <strong>Band 0 to Band 9</strong>.
+        </p>
+
+        <p>
+          🚀 <strong>Remember: Academic Reading tests your ability to understand complex written English, identify important information, recognise arguments and analyse the writer's ideas and opinions.</strong>
+        </p>
+      `,
+
+      general:`
+        <h3>📖 IELTS General Training Reading Test</h3>
+
+        <p>
+          The IELTS General Training Reading test assesses your ability to understand written English in everyday, workplace and general social situations. It is mainly designed for people who plan to migrate, work, undertake workplace training or study below degree level in an English-speaking country.
+        </p>
+
+        <p>
+          🏠 The texts are based on materials that you may encounter in everyday life, such as advertisements, notices, instructions, workplace documents, newspapers and general-interest articles.
+        </p>
+
+        <h3>⏱️ Test Duration</h3>
+
+        <p>
+          You have <strong>60 minutes</strong> to complete the Reading test.
+        </p>
+
+        <p>
+          📌 The test contains <strong>40 questions</strong> based on three sections.
+        </p>
+
+        <p>
+          ⚠️ You must complete the entire Reading test and transfer your answers within the 60-minute test period.
+        </p>
+
+        <h3>📄 The Three Sections</h3>
+
+        <h3>🏠 Section 1 — Everyday English</h3>
+
+        <p>
+          Section 1 usually contains several short texts or a number of short texts related to everyday life.
+        </p>
+
+        <p>Examples include:</p>
+
+        <ul>
+          <li>🏠 Accommodation advertisements</li>
+          <li>🚌 Transport information</li>
+          <li>📢 Public notices</li>
+          <li>🛍️ Product or service advertisements</li>
+          <li>📅 Event information</li>
+          <li>📋 Instructions and guidelines</li>
+        </ul>
+
+        <p>
+          🎯 You usually need to locate specific information quickly, such as dates, prices, locations, times and contact details.
+        </p>
+
+        <h3>💼 Section 2 — Workplace English</h3>
+
+        <p>
+          Section 2 focuses on texts related to work, training and professional situations.
+        </p>
+
+        <p>Possible texts include:</p>
+
+        <ul>
+          <li>👔 Job descriptions</li>
+          <li>📋 Workplace policies</li>
+          <li>🧑‍💼 Staff training information</li>
+          <li>⚠️ Workplace safety instructions</li>
+          <li>📄 Company procedures</li>
+          <li>📧 Workplace communication</li>
+        </ul>
+
+        <p>
+          You need to understand instructions, procedures, responsibilities and important workplace information.
+        </p>
+
+        <h3>📚 Section 3 — General-Interest Text</h3>
+
+        <p>
+          Section 3 contains one longer and more complex text on a topic of general interest.
+        </p>
+
+        <p>
+          The text may discuss topics such as:
+        </p>
+
+        <ul>
+          <li>🌍 Society</li>
+          <li>🌱 The environment</li>
+          <li>🔬 Science</li>
+          <li>🏛️ History</li>
+          <li>🧠 Psychology</li>
+          <li>💻 Technology</li>
+        </ul>
+
+        <p>
+          This section is usually the most challenging part of the General Training Reading test because it requires you to understand a longer text, its main ideas, supporting details and the writer's opinions.
+        </p>
+
+        <h3>📝 Common Question Types</h3>
+
+        <p>
+          The General Training Reading test may include several types of questions:
+        </p>
+
+        <ul>
+          <li>🔢 <strong>Multiple Choice</strong></li>
+          <li>✅ <strong>True / False / Not Given</strong></li>
+          <li>💭 <strong>Yes / No / Not Given</strong></li>
+          <li>🔗 <strong>Matching Information</strong></li>
+          <li>📌 <strong>Matching Headings</strong></li>
+          <li>👤 <strong>Matching Features</strong></li>
+          <li>✍️ <strong>Sentence Completion</strong></li>
+          <li>📋 <strong>Summary, Note, Table or Flow-chart Completion</strong></li>
+          <li>🏷️ <strong>Diagram Label Completion</strong></li>
+        </ul>
+
+        <h3>⚠️ Important Reading Rules</h3>
+
+        <ul>
+          <li>⏱️ You have only <strong>60 minutes</strong> for the entire test.</li>
+          <li>🔍 Skim texts first to understand their general purpose.</li>
+          <li>🎯 Scan for names, numbers, dates and keywords.</li>
+          <li>🧠 Look for synonyms and paraphrases rather than only exact words.</li>
+          <li>✍️ Follow the word limit carefully.</li>
+          <li>🔤 Spelling must be accurate.</li>
+          <li>📖 Do not spend too much time on one difficult question.</li>
+        </ul>
+
+        <h3>🎯 Important Skills for General Training Reading</h3>
+
+        <ul>
+          <li>🔎 <strong>Skimming:</strong> Quickly understanding the purpose of a text.</li>
+          <li>🎯 <strong>Scanning:</strong> Finding specific information quickly.</li>
+          <li>🧠 <strong>Paraphrase recognition:</strong> Understanding that the same idea may be expressed using different words.</li>
+          <li>📋 <strong>Understanding practical information:</strong> Finding instructions, conditions, dates and details.</li>
+          <li>🔗 <strong>Understanding opinions:</strong> Identifying the writer's ideas and attitudes in longer texts.</li>
+        </ul>
+
+        <h3>📈 General Training Reading Band Score</h3>
+
+        <p>
+          You receive one mark for each correct answer. There are <strong>40 questions</strong> in total. Your raw score is converted into an IELTS Reading band score from <strong>Band 0 to Band 9</strong>.
+        </p>
+
+        <p>
+          🚀 <strong>Remember: General Training Reading tests your ability to understand practical everyday information, workplace texts and longer general-interest passages.</strong>
+        </p>
+      `
+    },
+    passage:{
+      academic:[
+        'Ambergris was used to perfume cosmetics in the days of ancient civilization on the earth and almost every civilization on the earth has a brush with Ambergris. Before 1,000 AD, the Chinese names ambergris as lung sien hiang, "dragon\u2019s spittle perfume," as they think that it was produced from the drooling of dragons sleeping on rocks at the edge of a sea. The Arabs knew ambergris as ambar who believed that it is produced from springs near seas. It also gets its name from here, this substance has also been used as a flavouring for food.',
+        'One of the forms ambergris is used today is as a valuable fixative in perfumes to enhance and prolong the scent. But nowadays, since ambergris is rare and expensive, and big fragrance suppliers that make most of the fragrances on the market today do not deal in it for reasons of cost, availability and murky legal issues, most perfumeries prefer to add a chemical derivative which mimics the properties of ambergris. As a fragrance consumer, you can assume that there is no natural ambergris in your perfume bottle, unless the company advertises this fact and unless you have your own vintage fragrances created before the 1980s. If you are wondering if you have been wearing a perfume with this legendary ingredient, you may want to review your scent collection. Here are a few of some of the top ambergris perfumes: Givenchy Amarige, Chanel No. 5, and Gucci Guilty.',
+        'During the Middle Ages, Europeans used ambergris as a remedy for headaches, colds, epilepsy, and other ailments. In the 1851 whaling novel Moby-Dick, Herman Melville claimed that ambergris was "largely used in perfumery." But nobody ever knew where it really came from. Experts were still guessing its origin thousands of years later, until the long ages of guesswork ended in the 1720s, when Nantucket whalers found gobs of the costly material inside the stomachs of sperm whales. Industrial whaling quickly burgeoned. By 20th century ambergris was mainly recovered from inside the carcasses of sperm whales.',
+        'Through countless ages, people have found pieces of ambergris on sandy beaches. It was named grey amber to distinguish it from golden amber, another rare treasure. Both of them were among the most sought-after substances in the world, almost as valuable as gold. (Ambergris sells for roughly $20 a gram, slightly less than gold at $30 a gram.) Amber floats in salt water, and in old times the origin of both these substances was mysterious. But it turned out that amber and ambergris have little in common. Amber is a fossilized resin from trees that was quite familiar to Europeans long before the discovery of the New World, and prized for jewelry material derived from the resin of extinct species of trees, mainly pines.',
+        'To the earliest Western chroniclers, ambergris was variously thought to come from the same bituminous sea founts as amber, from the droppings of strange sea birds (probably because of confusion over the included beaks of squid) or from the large hives of bees living near the sea. Marco Polo was the first Western chronicler who correctly attributed ambergris to sperm whales and its vomit.',
+        'As sperm whales navigate in the oceans, they often dive down to 2 km or more below the sea level to prey on squid, most famously the Giant Squid. It\u2019s commonly accepted that ambergris forms in the whale\u2019s gut or intestines as the creature attempts to "deal" with squid beaks, sperm whales are rather partial to squid, but seemingly struggle to digest the hard, sharp, parrot-like beaks. It is thought their stomach juices become hyperactive trying to process the irritants, and eventually hard, resinous lumps are formed around the beaks, and then expelled from their innards by vomiting. When a whale initially vomits up ambergris, it is soft and has a terrible smell. Some marine biologists compare it to the unpleasant smell of cow dung. But after floating on the salty ocean for about a decade, the substance hardens with air and sun into a smooth, waxy, usually rounded piece of nostril heaven. The dung smell is gone, replaced by a sweet, smooth, musky and pleasant earthy aroma.',
+        'Since ambergris is derived from animals, naturally a question of ethics arises, and in the case of ambergris, it is very important to consider. Sperm whales are an endangered species, whose populations started to decline as far back as the 19th century due to the high demand for their highly emollient oil, and today their stocks still have not recovered. During the 1970\u2019s, the Save the Whales movement brought their plight of whales to international recognition. Many people now believe that whales are important to consider before ambergris is becoming more expensive than before. New uses of ambergris have been discovered recently.'
+      ],
+      general:[
+        'A. Photographing Wildlife \u2014 This workshop includes an introduction in the classroom, two photography sessions with specially arranged access to the zoo enclosures so that you can take natural-looking close-ups of the most exotic species, and the opportunity to review and discuss your images as a group.',
+        'B. Drawing For Fun \u2014 You will learn some basic techniques using soft pencils and charcoal. These and different types of paper are provided. Just bring yourself and a willingness to \u2018have a go\u2019. This is a start-up day so people who have already attended courses should not apply.',
+        'C. Find Your Voice \u2014 You may feel you can\u2019t sing or you may be an established singer who wants to improve or gain confidence. You will be shown how to sing in tune, how to breathe correctly and how to project your voice. You may attend this course more than once and have a wonderful experience. Everyone can sing and it\u2019s great fun.',
+        'D. Focus On Landscapes \u2014 This course is designed for students who are familiar with painting in watercolours, but are having difficulty with some techniques. We will discuss choice of materials, colour mixing and any other areas that may be raised.',
+        'E. Taking Happy Pictures \u2014 The main objective is to introduce you to the skills required to take good photographs of people at special events, such as parties or weddings. We will discuss camera settings, dealing with varied light or bad weather, and how to get a good atmosphere. After a light lunch cooked in the studio, there will be a further practical session.',
+        'F. The Music Takeaway \u2014 Get some friends, family or colleagues together for your own music course in a venue of your choice, which could be your front room, basement or workplace. We send two guitar tutors to lead a one-day session for you in the style of music you prefer, such as rock, country, funk or blues.'
+      ]
+    },
+    quiz:{
+      academic:[
+        { q:'Classify: being expensive', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'C Both ambergris and amber' },
+        { q:'Classify: adds flavour to food', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'A Ambergris only' },
+        { q:'Classify: used as currency', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'D Neither ambergris nor amber' },
+        { q:'Classify: being see-through', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'A Ambergris only' },
+        { q:'Classify: referred to by Herman Melville', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'B Amber only' },
+        { q:'Classify: produces sweet smell', type:'mcq', options:['A Ambergris only','B Amber only','C Both ambergris and amber','D Neither ambergris nor amber'], answer:'A Ambergris only' },
+        { q:'Sperm whales can\u2019t digest the ______ of the squids.', type:'text', answer:'beaks', accept:['beaks','beak'] },
+        { q:'Sperm whales drive the irritants out of their intestines by ______ .', type:'text', answer:'vomiting', accept:['vomiting','vomit'] },
+        { q:'The vomit of sperm whale gradually ______ on contact with air before having a pleasant smell.', type:'text', answer:'hardens', accept:['hardens','harden'] },
+        { q:'Most ambergris comes from the dead whales today. (True/False/Not Given)', type:'mcq', options:['True','False','Not Given'], answer:'True' },
+        { q:'Ambergris is becoming more expensive than before. (True/False/Not Given)', type:'mcq', options:['True','False','Not Given'], answer:'Not Given' },
+        { q:'Ambergris is still a popular ingredient in perfume production today. (True/False/Not Given)', type:'mcq', options:['True','False','Not Given'], answer:'Not Given' },
+        { q:'New uses of ambergris have been discovered recently. (True/False/Not Given)', type:'mcq', options:['True','False','Not Given'], answer:'False' }
+      ],
+      general:[
+        { q:'Participants can decide where the course is held.', type:'mcq', options:['A','B','C','D','E','F'], answer:'F' },
+        { q:'Different ability levels are welcome.', type:'mcq', options:['A','B','C','D','E','F'], answer:'C' },
+        { q:'All the necessary materials are supplied.', type:'mcq', options:['A','B','C','D','E','F'], answer:'B' },
+        { q:'Participants will be able to go where the public are not normally allowed.', type:'mcq', options:['A','B','C','D','E','F'], answer:'A' },
+        { q:'It is possible to repeat this course.', type:'mcq', options:['A','B','C','D','E','F'], answer:'C' },
+        { q:'You can select what to study from a range of options.', type:'mcq', options:['A','B','C','D','E','F'], answer:'F' },
+        { q:'The course will provide advice on how to overcome difficult conditions.', type:'mcq', options:['A','B','C','D','E','F'], answer:'E' }
+      ]
+    } },
+
+  { id:'wt1', type:'writing', step:'Module 6', title:'Writing Task 1', tag:'Academic / General',
+    video:{ academic:'https://www.youtube.com/embed/-3DiKtHxjIw', general:'https://www.youtube.com/embed/DX45Eic4oDc' },
+    info:{ academic:`
+        <h3>📊 IELTS Academic Writing Task 1</h3>
+
+        <p>
+          IELTS Academic Writing Task 1 assesses your ability to understand visual information and present the main features clearly and accurately in written English.
+        </p>
+      
+        <p>
+          📈 You may be given a <strong>graph, chart, table, diagram, process, map or a combination of visual information</strong>. Your task is to summarise the important information in your own words.
+        </p>
+      
+        <h3>⏱️ Test Requirements</h3>
+      
+        <ul>
+          <li>⏰ You have approximately <strong>20 minutes</strong> to complete Task 1.</li>
+          <li>📝 You must write at least <strong>150 words</strong>.</li>
+          <li>📊 You must describe the information shown in the visual.</li>
+          <li>🚫 You should not include personal opinions or unsupported explanations.</li>
+        </ul>
+      
+        <p>
+          📌 Writing Task 1 contributes approximately <strong>one-third of your total Writing score</strong>, while Writing Task 2 contributes approximately two-thirds.
+        </p>
+      
+        <h3>📋 Types of Academic Task 1 Questions</h3>
+      
+        <p>
+          You may be asked to describe several different types of visual information.
+        </p>
+      
+        <h3>📈 1. Line Graph</h3>
+      
+        <p>
+          A line graph usually shows changes or trends over a period of time.
+        </p>
+      
+        <p>🔍 You should look for:</p>
+      
+        <ul>
+          <li>📈 Increases</li>
+          <li>📉 Decreases</li>
+          <li>〰️ Fluctuations</li>
+          <li>➡️ Stable trends</li>
+          <li>🏆 Highest and lowest figures</li>
+          <li>🔄 Significant changes over time</li>
+        </ul>
+      
+        <h3>📊 2. Bar Chart</h3>
+      
+        <p>
+          A bar chart usually compares different categories, groups, places or time periods.
+        </p>
+      
+        <p>
+          🎯 Your task is to identify the most important comparisons rather than describe every single bar individually.
+        </p>
+      
+        <h3>🥧 3. Pie Chart</h3>
+      
+        <p>
+          A pie chart shows how something is divided into different proportions or percentages.
+        </p>
+      
+        <p>Look for:</p>
+      
+        <ul>
+          <li>🥇 The largest proportion</li>
+          <li>🔻 The smallest proportion</li>
+          <li>⚖️ Similar percentages</li>
+          <li>🔄 Significant differences between categories</li>
+        </ul>
+      
+        <h3>📋 4. Table</h3>
+      
+        <p>
+          A table presents information using rows and columns. The information may include numbers, percentages, dates or other measurements.
+        </p>
+      
+        <p>
+          🧠 The key challenge is to identify the most significant patterns and comparisons instead of listing every number.
+        </p>
+      
+        <h3>🔄 5. Process Diagram</h3>
+      
+        <p>
+          A process diagram shows how something is produced, manufactured or completed.
+        </p>
+      
+        <p>It may show:</p>
+      
+        <ul>
+          <li>🏭 A manufacturing process</li>
+          <li>🌱 A natural process</li>
+          <li>🔁 A cycle</li>
+          <li>⚙️ A series of stages</li>
+        </ul>
+      
+        <p>
+          ✍️ You should explain the stages in the correct order and use appropriate sequencing language.
+        </p>
+      
+        <h3>🗺️ 6. Maps and Plans</h3>
+      
+        <p>
+          Maps usually show how a location has changed over time or how a place is planned to develop.
+        </p>
+      
+        <p>Important features may include:</p>
+      
+        <ul>
+          <li>🏢 New buildings</li>
+          <li>🛣️ New roads</li>
+          <li>🗑️ Removed facilities</li>
+          <li>🔄 Changes in land use</li>
+          <li>📍 Changes in location</li>
+        </ul>
+      
+        <h3>📊 7. Mixed or Multiple Visuals</h3>
+      
+        <p>
+          Sometimes you may be given two or more visuals together, such as a bar chart and a pie chart or a table and a line graph.
+        </p>
+      
+        <p>
+          🔗 You should identify the relationship between the visuals and summarise the most important information from both.
+        </p>
+      
+        <h3>🏗️ Recommended Essay Structure</h3>
+      
+        <p>
+          A clear Academic Task 1 response usually contains four paragraphs.
+        </p>
+      
+        <h3>1️⃣ Introduction</h3>
+      
+        <p>
+          Paraphrase the question using your own words. Do not copy the question directly.
+        </p>
+      
+        <p>
+          ✍️ Example:
+          <br>
+          <em>
+          The line graph illustrates changes in the number of people who used public transport in three cities between 2000 and 2020.
+          </em>
+        </p>
+      
+        <h3>2️⃣ Overview</h3>
+      
+        <p>
+          The overview is one of the most important parts of Task 1. It summarises the main trends or significant features without including too many specific numbers.
+        </p>
+      
+        <p>
+          🎯 You should usually mention:
+        </p>
+      
+        <ul>
+          <li>📈 The overall increase or decrease</li>
+          <li>🏆 The highest figure</li>
+          <li>🔻 The lowest figure</li>
+          <li>⚖️ Major similarities or differences</li>
+          <li>🔄 The most noticeable changes</li>
+        </ul>
+      
+        <p>
+          🚫 Avoid including too many exact figures in the overview.
+        </p>
+      
+        <h3>3️⃣ Body Paragraph 1</h3>
+      
+        <p>
+          Select and compare the first important group of information. Support your descriptions with relevant data from the visual.
+        </p>
+      
+        <p>
+          📊 You do not need to describe every single piece of information. Select the most important details.
+        </p>
+      
+        <h3>4️⃣ Body Paragraph 2</h3>
+      
+        <p>
+          Describe and compare the remaining important information. Continue to group similar trends or categories together.
+        </p>
+      
+        <h3>📈 Useful Language for Trends</h3>
+      
+        <ul>
+          <li>📈 <strong>Increase:</strong> rise, grow, climb, increase, surge</li>
+          <li>📉 <strong>Decrease:</strong> fall, decline, drop, decrease, plunge</li>
+          <li>〰️ <strong>Fluctuation:</strong> fluctuate, vary, experience ups and downs</li>
+          <li>➡️ <strong>Stability:</strong> remain stable, remain unchanged, level off</li>
+          <li>⚡ <strong>Speed:</strong> gradually, steadily, slightly, sharply, dramatically</li>
+        </ul>
+      
+        <h3>🔢 Describing Numbers and Comparisons</h3>
+      
+        <ul>
+          <li>📌 approximately</li>
+          <li>📌 just over</li>
+          <li>📌 just under</li>
+          <li>📌 nearly</li>
+          <li>📌 twice as high as</li>
+          <li>📌 three times higher than</li>
+          <li>📌 significantly higher than</li>
+          <li>📌 considerably lower than</li>
+          <li>📌 similar to</li>
+          <li>📌 whereas</li>
+          <li>📌 compared with</li>
+        </ul>
+      
+        <h3>🔄 Language for Processes</h3>
+      
+        <ul>
+          <li>➡️ Initially</li>
+          <li>➡️ Subsequently</li>
+          <li>➡️ Following this</li>
+          <li>➡️ The next stage involves...</li>
+          <li>➡️ After this process...</li>
+          <li>➡️ Finally</li>
+        </ul>
+      
+        <h3>🗺️ Language for Maps</h3>
+      
+        <ul>
+          <li>📍 To the north of</li>
+          <li>📍 To the south of</li>
+          <li>📍 In the eastern part of the area</li>
+          <li>📍 Adjacent to</li>
+          <li>📍 Opposite</li>
+          <li>📍 Next to</li>
+          <li>📍 Was replaced by</li>
+          <li>📍 Was converted into</li>
+          <li>📍 Was demolished</li>
+          <li>📍 Was constructed</li>
+        </ul>
+      
+        <h3>⚠️ Important Rules</h3>
+      
+        <ul>
+          <li>🚫 Do not give your personal opinion.</li>
+          <li>🚫 Do not explain reasons unless the visual provides them.</li>
+          <li>🚫 Do not write a conclusion like you would in Task 2.</li>
+          <li>📊 Do not simply list every number from the visual.</li>
+          <li>🔗 Always make meaningful comparisons.</li>
+          <li>📝 Write at least 150 words.</li>
+          <li>🔤 Check spelling, grammar and numerical accuracy.</li>
+        </ul>
+      
+        <h3>📊 How Academic Task 1 Is Assessed</h3>
+      
+        <p>
+          Your response is assessed using four criteria:
+        </p>
+      
+        <ul>
+          <li>🎯 <strong>Task Achievement:</strong> How accurately and completely you address the visual information.</li>
+          <li>🔗 <strong>Coherence and Cohesion:</strong> How logically you organise your ideas and connect your sentences.</li>
+          <li>📚 <strong>Lexical Resource:</strong> The range and accuracy of your vocabulary.</li>
+          <li>✍️ <strong>Grammatical Range and Accuracy:</strong> The variety and accuracy of your sentence structures.</li>
+        </ul>
+      
+        <h3>🚀 The Main Goal</h3>
+      
+        <p>
+          The goal of Academic Writing Task 1 is not to describe every detail. Instead, you should identify the most significant features, organise the information logically, make relevant comparisons and support your descriptions with accurate data.
+        </p>
+      
+        <p>
+          🏆 <strong>A strong Task 1 response usually follows this pattern:</strong>
+        </p>
+      
+        <p>
+          📌 Introduction → 🔍 Overview → 📊 Key Details and Comparisons → 📈 Key Details and Comparisons
+        </p>
+      `,
+    general:`
+        <h3>✉️ IELTS General Training Writing Task 1</h3>
+
+        <p>
+          IELTS General Training Writing Task 1 assesses your ability to write a letter in response to a particular situation. You may need to request information, make a complaint, apologise, invite someone, explain a situation or ask for help.
+        </p>
+
+        <p>
+          📌 Unlike Academic Writing Task 1, you do not describe a graph, chart, table, map or process. Instead, you write a letter based on the situation and instructions given in the question.
+        </p>
+
+        <h3>⏱️ Test Requirements</h3>
+
+        <ul>
+          <li>⏰ You have approximately <strong>20 minutes</strong> to complete Task 1.</li>
+          <li>📝 You must write at least <strong>150 words</strong>.</li>
+          <li>✉️ You must write a letter in response to a given situation.</li>
+          <li>🎯 You must address all the points mentioned in the question.</li>
+        </ul>
+
+        <p>
+          📊 Writing Task 1 contributes approximately <strong>one-third of your total Writing score</strong>, while Writing Task 2 contributes approximately two-thirds.
+        </p>
+
+        <h3>✉️ Types of Letters</h3>
+
+        <p>
+          The tone and style of your letter depend on the person you are writing to and your relationship with that person.
+        </p>
+
+        <h3>🏢 1. Formal Letter</h3>
+
+        <p>
+          You write a formal letter when you are communicating with someone you do not know personally or with an organisation, company or official authority.
+        </p>
+
+        <p>Examples include:</p>
+
+        <ul>
+          <li>🏢 Writing to a company</li>
+          <li>🏛️ Writing to a government authority</li>
+          <li>👔 Writing to a manager</li>
+          <li>🏠 Writing to a landlord you do not know personally</li>
+          <li>📢 Making a complaint</li>
+          <li>📝 Requesting information</li>
+        </ul>
+
+        <p>
+          🎯 Use polite and professional language. Avoid slang and overly casual expressions.
+        </p>
+
+        <h3>🤝 2. Semi-Formal Letter</h3>
+
+        <p>
+          You write a semi-formal letter to someone you know, but the situation requires polite and respectful language.
+        </p>
+
+        <p>Examples include:</p>
+
+        <ul>
+          <li>🏠 Writing to a landlord you know</li>
+          <li>👨‍🏫 Writing to a teacher</li>
+          <li>👔 Writing to a colleague</li>
+          <li>🏘️ Writing to a neighbour</li>
+        </ul>
+
+        <p>
+          🗣️ The language can be personal but should remain polite and appropriate.
+        </p>
+
+        <h3>👋 3. Informal Letter</h3>
+
+        <p>
+          You write an informal letter to someone you know well, such as a friend or family member.
+        </p>
+
+        <p>Examples include:</p>
+
+        <ul>
+          <li>👫 Inviting a friend</li>
+          <li>🎉 Thanking someone</li>
+          <li>🏖️ Describing a holiday</li>
+          <li>🙏 Apologising to a friend</li>
+          <li>💡 Giving advice</li>
+        </ul>
+
+        <p>
+          😊 You can use a friendly and conversational tone in an informal letter.
+        </p>
+
+        <h3>📋 The Three Bullet Points</h3>
+
+        <p>
+          Every Task 1 question usually provides three points that you must address in your letter.
+        </p>
+
+        <p>
+          🎯 You should make sure that all three points are clearly answered. Missing one of them can negatively affect your Task Achievement score.
+        </p>
+
+        <p>
+          📌 A useful approach is to dedicate one main paragraph to each bullet point, although this is not an absolute requirement.
+        </p>
+
+        <h3>🏗️ Recommended Letter Structure</h3>
+
+        <p>
+          A clear General Training Task 1 letter usually contains the following parts:
+        </p>
+
+        <h3>1️⃣ Greeting</h3>
+
+        <p>
+          Choose your greeting according to the relationship with the person.
+        </p>
+
+        <ul>
+          <li>🏢 <strong>Dear Sir or Madam,</strong> — when you do not know the person's name.</li>
+          <li>👔 <strong>Dear Mr Smith,</strong> — when you know the person's name.</li>
+          <li>👋 <strong>Dear John,</strong> — for someone you know personally.</li>
+        </ul>
+
+        <h3>2️⃣ Opening Paragraph</h3>
+
+        <p>
+          Clearly explain the purpose of your letter.
+        </p>
+
+        <p>Examples:</p>
+
+        <ul>
+          <li>📝 I am writing to enquire about...</li>
+          <li>📢 I am writing to complain about...</li>
+          <li>🙏 I am writing to apologise for...</li>
+          <li>💡 I am writing to suggest...</li>
+          <li>✉️ I am writing in response to...</li>
+        </ul>
+
+        <h3>3️⃣ Body Paragraphs</h3>
+
+        <p>
+          Develop the three points given in the question. Provide relevant details and explanations rather than simply mentioning each point.
+        </p>
+
+        <p>
+          🧠 For example, if the question asks you to explain a problem, describe what happened, when it happened and how it affected you.
+        </p>
+
+        <h3>4️⃣ Closing Paragraph</h3>
+
+        <p>
+          End the letter appropriately by stating what you expect, what action you would like to be taken or what you hope will happen next.
+        </p>
+
+        <p>Examples:</p>
+
+        <ul>
+          <li>📩 I look forward to hearing from you.</li>
+          <li>🙏 I would appreciate it if you could look into this matter.</li>
+          <li>😊 I hope to hear from you soon.</li>
+          <li>📅 Please let me know if you are available.</li>
+        </ul>
+
+        <h3>✍️ Sign-Offs</h3>
+
+        <p>
+          Your closing phrase should match your greeting.
+        </p>
+
+        <ul>
+          <li>🏢 <strong>Dear Sir or Madam → Yours faithfully</strong></li>
+          <li>👔 <strong>Dear Mr Smith → Yours sincerely</strong></li>
+          <li>👋 <strong>Dear John → Best wishes / Kind regards / Take care</strong></li>
+        </ul>
+
+        <h3>🗣️ Choosing the Correct Tone</h3>
+
+        <p>
+          The tone of your letter is extremely important. You should decide whether the situation is formal, semi-formal or informal before you start writing.
+        </p>
+
+        <h3>🏢 Formal Language</h3>
+
+        <ul>
+          <li>📌 I would like to enquire about...</li>
+          <li>📌 I would be grateful if you could...</li>
+          <li>📌 I would appreciate it if...</li>
+          <li>📌 I am writing to express my dissatisfaction with...</li>
+          <li>📌 I look forward to your prompt response.</li>
+        </ul>
+
+        <h3>🤝 Semi-Formal Language</h3>
+
+        <ul>
+          <li>📌 I am writing to let you know about...</li>
+          <li>📌 I would appreciate your help with...</li>
+          <li>📌 I was wondering if you could...</li>
+          <li>📌 I hope you could help me resolve this issue.</li>
+        </ul>
+
+        <h3>👋 Informal Language</h3>
+
+        <ul>
+          <li>😊 I just wanted to tell you about...</li>
+          <li>📩 I thought I would write to let you know...</li>
+          <li>💡 Why don't we...</li>
+          <li>🎉 It would be great if you could...</li>
+          <li>😊 Hope to hear from you soon!</li>
+        </ul>
+
+        <h3>📋 Common Task 1 Situations</h3>
+
+        <ul>
+          <li>🏠 Complaining about accommodation</li>
+          <li>📢 Making a complaint about a service</li>
+          <li>🙏 Apologising for a mistake</li>
+          <li>🎉 Inviting someone to an event</li>
+          <li>💡 Giving advice</li>
+          <li>📚 Requesting information about a course</li>
+          <li>💼 Applying for a job or position</li>
+          <li>🎁 Thanking someone</li>
+          <li>🏖️ Describing a trip or experience</li>
+          <li>📦 Reporting a lost or damaged item</li>
+        </ul>
+
+        <h3>⚠️ Important Rules</h3>
+
+        <ul>
+          <li>📝 Write at least <strong>150 words</strong>.</li>
+          <li>🎯 Answer all three bullet points.</li>
+          <li>✉️ Use the correct letter format.</li>
+          <li>🗣️ Match your tone to the person you are writing to.</li>
+          <li>🚫 Do not use informal language in a formal letter.</li>
+          <li>🚫 Do not write an essay-style introduction and conclusion.</li>
+          <li>🔗 Organise your ideas into clear paragraphs.</li>
+          <li>🔤 Check grammar, spelling and punctuation.</li>
+        </ul>
+
+        <h3>📊 How General Training Task 1 Is Assessed</h3>
+
+        <p>
+          Your letter is assessed using four criteria:
+        </p>
+
+        <ul>
+          <li>🎯 <strong>Task Achievement:</strong> How fully and appropriately you address the situation and all the bullet points.</li>
+          <li>🔗 <strong>Coherence and Cohesion:</strong> How clearly and logically you organise your letter.</li>
+          <li>📚 <strong>Lexical Resource:</strong> The range and accuracy of your vocabulary.</li>
+          <li>✍️ <strong>Grammatical Range and Accuracy:</strong> The variety and accuracy of your sentence structures.</li>
+        </ul>
+
+        <h3>🚀 The Main Goal</h3>
+
+        <p>
+          The goal of General Training Writing Task 1 is to write a clear, well-organised and appropriate letter that fully responds to the situation. You should communicate your purpose clearly, develop all the required points and use language that matches the level of formality required.
+        </p>
+
+        <p>
+          🏆 <strong>A strong Task 1 response usually follows this pattern:</strong>
+        </p>
+
+        <p>
+          ✉️ Greeting → 🎯 Purpose → 📝 Develop the three points → 📩 Appropriate closing
+        </p>
+        `
+    },
+    prompt:{ academic:'The table below shows a survey on the preference of different age groups in a European country on different TV programmes in 2012. Summarise the information by selecting and reporting the main features and make comparisons where relevant. Write at least 150 words.',
+             general:'You and your family are planning to spend a weekend at a seaside hotel. Write a letter to the hotel making the arrangement. In your letter: let them know when you will be arriving and leaving; say what type of rooms you would like, and ask how much the weekend will cost; also enquire about activities and places of interest near the hotel. Write at least 150 words.' },
+    table:{ academic:`<table class="data-table"><caption>TV Programme preference by age group (%), 2012</caption>
+      <thead><tr><th>TV Programme</th><th>11\u201315</th><th>16\u201320</th><th>21\u201325</th></tr></thead>
+      <tbody>
+      <tr><td>Cartoons</td><td>29</td><td>18</td><td>4</td></tr>
+      <tr><td>Feature films</td><td>18</td><td>23</td><td>20</td></tr>
+      <tr><td>News</td><td>6</td><td>19</td><td>23</td></tr>
+      <tr><td>Soap Opera</td><td>17</td><td>12</td><td>19</td></tr>
+      <tr><td>TV dramas</td><td>8</td><td>10</td><td>13</td></tr>
+      <tr><td>Sports</td><td>22</td><td>18</td><td>21</td></tr>
+      </tbody></table>` } },
+
+  { id:'wt2', type:'writing', step:'Module 7', title:'Writing Task 2', tag:'Skill',
+    video:'https://www.youtube.com/embed/hciUk8EWLVw',
+    info:{
+      academic:`
+        <h3>✍️ IELTS Writing Task 2</h3>
+
+        <p>
+          IELTS Writing Task 2 assesses your ability to write a clear, well-organised and well-supported essay in response to a particular question or topic.
+        </p>
+      
+        <p>
+          🧠 You are expected to present relevant ideas, explain your opinions, support your arguments with examples and use a range of appropriate vocabulary and grammatical structures.
+        </p>
+      
+        <h3>⏱️ Test Requirements</h3>
+      
+        <ul>
+          <li>⏰ You have approximately <strong>40 minutes</strong> to complete Task 2.</li>
+          <li>📝 You must write at least <strong>250 words</strong>.</li>
+          <li>🎯 You must answer all parts of the question.</li>
+          <li>📚 Your response should be written as a structured essay.</li>
+        </ul>
+      
+        <p>
+          📊 Writing Task 2 is especially important because it carries approximately <strong>twice the weight of Writing Task 1</strong> in the overall IELTS Writing score.
+        </p>
+      
+        <h3>📋 Common Types of Task 2 Questions</h3>
+      
+        <h3>1️⃣ Opinion Essay</h3>
+      
+        <p>
+          You are asked to express your opinion about a particular statement.
+        </p>
+      
+        <p>
+          💭 Common question phrases include:
+        </p>
+      
+        <ul>
+          <li>Do you agree or disagree?</li>
+          <li>To what extent do you agree or disagree?</li>
+        </ul>
+      
+        <p>
+          🎯 You should clearly state your position and support it with logical reasons and relevant examples.
+        </p>
+      
+        <h3>2️⃣ Discussion Essay</h3>
+      
+        <p>
+          You are asked to discuss two different opinions or views.
+        </p>
+      
+        <p>
+          💬 Common question phrase:
+        </p>
+      
+        <p>
+          <em>Discuss both views and give your own opinion.</em>
+        </p>
+      
+        <p>
+          ⚖️ You should explain both perspectives and clearly present your own position.
+        </p>
+      
+        <h3>3️⃣ Advantages and Disadvantages Essay</h3>
+      
+        <p>
+          You are asked to discuss the positive and negative aspects of a particular development, situation or idea.
+        </p>
+      
+        <p>
+          📈 You may also be asked:
+        </p>
+      
+        <p>
+          <em>Do the advantages outweigh the disadvantages?</em>
+        </p>
+      
+        <p>
+          ⚖️ In this case, you must clearly decide which side is stronger and explain why.
+        </p>
+      
+        <h3>4️⃣ Problem and Solution Essay</h3>
+      
+        <p>
+          You are asked to explain the problems associated with a particular issue and suggest possible solutions.
+        </p>
+      
+        <p>
+          🔍 You should explain:
+        </p>
+      
+        <ul>
+          <li>❗ What the main problems are</li>
+          <li>💡 Why they occur</li>
+          <li>🛠️ What solutions could be implemented</li>
+          <li>🎯 How these solutions could help</li>
+        </ul>
+      
+        <h3>5️⃣ Two-Part Question Essay</h3>
+      
+        <p>
+          Some questions contain two separate questions that must both be answered.
+        </p>
+      
+        <p>
+          ❓ For example, you may be asked:
+        </p>
+      
+        <ul>
+          <li>Why is this happening?</li>
+          <li>Is this a positive or negative development?</li>
+        </ul>
+      
+        <p>
+          🎯 You must answer both questions clearly and give sufficient explanation for each one.
+        </p>
+      
+        <h3>🏗️ Recommended Essay Structure</h3>
+      
+        <p>
+          A clear Task 2 essay usually contains four or five paragraphs.
+        </p>
+      
+        <h3>1️⃣ Introduction</h3>
+      
+        <p>
+          The introduction should introduce the topic and clearly present your position or the main idea of your essay.
+        </p>
+      
+        <p>
+          ✍️ A strong introduction usually includes:
+        </p>
+      
+        <ul>
+          <li>🔄 A paraphrase of the question</li>
+          <li>🎯 A clear thesis statement</li>
+        </ul>
+      
+        <h3>2️⃣ Body Paragraph 1</h3>
+      
+        <p>
+          Present your first main idea and develop it with explanations and a relevant example.
+        </p>
+      
+        <p>
+          🧠 A useful structure is:
+        </p>
+      
+        <p>
+          💡 Main Idea → 🔍 Explanation → 📌 Example → 🔗 Link to the question
+        </p>
+      
+        <h3>3️⃣ Body Paragraph 2</h3>
+      
+        <p>
+          Present your second main idea and develop it in the same way.
+        </p>
+      
+        <p>
+          💡 Main Idea → 🔍 Explanation → 📌 Example → 🔗 Link to the question
+        </p>
+      
+        <h3>4️⃣ Conclusion</h3>
+      
+        <p>
+          Summarise the main ideas discussed in the essay and restate your position or overall answer.
+        </p>
+      
+        <p>
+          🚫 Do not introduce a completely new idea in the conclusion.
+        </p>
+      
+        <h3>🧠 Developing Your Ideas</h3>
+      
+        <p>
+          A strong essay does not simply list ideas. Each main point should be properly developed.
+        </p>
+      
+        <p>
+          🏆 A useful approach is:
+        </p>
+      
+        <p>
+          💡 <strong>Point</strong> → 🔍 <strong>Explain</strong> → 📌 <strong>Example</strong> → 🎯 <strong>Result</strong>
+        </p>
+      
+        <p>
+          For example, if your main idea is that public transport reduces traffic congestion, you should explain how this happens and provide a relevant example or consequence.
+        </p>
+      
+        <h3>🔗 Coherence and Cohesion</h3>
+      
+        <p>
+          Your essay should be logically organised and easy to follow.
+        </p>
+      
+        <p>
+          Useful linking expressions include:
+        </p>
+      
+        <ul>
+          <li>➕ Furthermore</li>
+          <li>➕ In addition</li>
+          <li>⚖️ However</li>
+          <li>🔄 On the other hand</li>
+          <li>🔍 For example</li>
+          <li>🎯 As a result</li>
+          <li>🔗 Therefore</li>
+          <li>📌 Consequently</li>
+        </ul>
+      
+        <p>
+          ⚠️ Do not use linking words mechanically in every sentence. Your ideas should connect naturally.
+        </p>
+      
+        <h3>📚 Vocabulary</h3>
+      
+        <p>
+          You should use a range of appropriate vocabulary related to the topic.
+        </p>
+      
+        <ul>
+          <li>🎯 Avoid repeating the same words unnecessarily.</li>
+          <li>📚 Use precise and appropriate vocabulary.</li>
+          <li>🔄 Use synonyms carefully.</li>
+          <li>🚫 Do not use difficult words simply to sound advanced.</li>
+          <li>🧠 Focus on accuracy as well as variety.</li>
+        </ul>
+      
+        <h3>✍️ Grammar</h3>
+      
+        <p>
+          A strong essay should demonstrate a variety of grammatical structures.
+        </p>
+      
+        <ul>
+          <li>📝 Simple sentences</li>
+          <li>🔗 Compound sentences</li>
+          <li>🏗️ Complex sentences</li>
+          <li>🔄 Conditional sentences</li>
+          <li>📌 Relative clauses</li>
+          <li>⚖️ Passive structures where appropriate</li>
+        </ul>
+      
+        <h3>⚠️ Important Rules</h3>
+      
+        <ul>
+          <li>📝 Write at least <strong>250 words</strong>.</li>
+          <li>🎯 Answer every part of the question.</li>
+          <li>💭 Clearly express your opinion when required.</li>
+          <li>🔗 Organise your essay into clear paragraphs.</li>
+          <li>📌 Support your main ideas with explanations and examples.</li>
+          <li>🚫 Do not memorise and blindly use irrelevant essays.</li>
+          <li>🚫 Do not include unrelated ideas.</li>
+          <li>🚫 Do not use informal language or texting abbreviations.</li>
+          <li>🔤 Check grammar, spelling and punctuation.</li>
+        </ul>
+      
+        <h3>📊 How Writing Task 2 Is Assessed</h3>
+      
+        <p>
+          Your essay is assessed using four criteria:
+        </p>
+      
+        <ul>
+          <li>🎯 <strong>Task Response:</strong> How completely and accurately you answer the question and develop your ideas.</li>
+          <li>🔗 <strong>Coherence and Cohesion:</strong> How logically you organise and connect your ideas.</li>
+          <li>📚 <strong>Lexical Resource:</strong> The range and accuracy of your vocabulary.</li>
+          <li>✍️ <strong>Grammatical Range and Accuracy:</strong> The variety and accuracy of your grammatical structures.</li>
+        </ul>
+      
+        <h3>🚀 The Main Goal</h3>
+      
+        <p>
+          The goal of IELTS Writing Task 2 is to present a clear position, develop relevant ideas logically, support your arguments with explanations and examples, and communicate your ideas accurately using appropriate vocabulary and grammar.
+        </p>
+      
+        <p>
+          🏆 <strong>A strong Task 2 essay usually follows this pattern:</strong>
+        </p>
+      
+        <p>
+          🎯 Introduction → 💡 Main Idea 1 → 💡 Main Idea 2 → 🏁 Conclusion
+        </p>
+      `,
+      
+      general:`
+        <h3>✍️ IELTS Writing Task 2</h3>
+      
+        <p>
+          IELTS Writing Task 2 assesses your ability to write a clear, well-organised and well-supported essay in response to a particular question or topic.
+        </p>
+      
+        <p>
+          🧠 You are expected to present relevant ideas, explain your opinions, support your arguments with examples and use a range of appropriate vocabulary and grammatical structures.
+        </p>
+      
+        <h3>⏱️ Test Requirements</h3>
+      
+        <ul>
+          <li>⏰ You have approximately <strong>40 minutes</strong> to complete Task 2.</li>
+          <li>📝 You must write at least <strong>250 words</strong>.</li>
+          <li>🎯 You must answer all parts of the question.</li>
+          <li>📚 Your response should be written as a structured essay.</li>
+        </ul>
+      
+        <p>
+          📊 Writing Task 2 is especially important because it carries approximately <strong>twice the weight of Writing Task 1</strong> in the overall IELTS Writing score.
+        </p>
+      
+        <h3>📋 Common Types of Task 2 Questions</h3>
+      
+        <h3>1️⃣ Opinion Essay</h3>
+      
+        <p>
+          You are asked to express your opinion about a particular statement.
+        </p>
+      
+        <ul>
+          <li>Do you agree or disagree?</li>
+          <li>To what extent do you agree or disagree?</li>
+        </ul>
+      
+        <p>
+          🎯 You should clearly state your position and support it with logical reasons and relevant examples.
+        </p>
+      
+        <h3>2️⃣ Discussion Essay</h3>
+      
+        <p>
+          You are asked to discuss two different opinions or views and usually give your own opinion.
+        </p>
+      
+        <p>
+          ⚖️ You should explain both perspectives and clearly present your own position.
+        </p>
+      
+        <h3>3️⃣ Advantages and Disadvantages Essay</h3>
+      
+        <p>
+          You are asked to discuss the positive and negative aspects of a particular development, situation or idea.
+        </p>
+      
+        <p>
+          ⚖️ If the question asks whether the advantages outweigh the disadvantages, you must clearly decide which side is stronger.
+        </p>
+      
+        <h3>4️⃣ Problem and Solution Essay</h3>
+      
+        <p>
+          You are asked to explain the problems associated with a particular issue and suggest possible solutions.
+        </p>
+      
+        <ul>
+          <li>❗ Identify the main problems.</li>
+          <li>🔍 Explain why they occur.</li>
+          <li>🛠️ Suggest practical solutions.</li>
+          <li>🎯 Explain how the solutions could help.</li>
+        </ul>
+      
+        <h3>5️⃣ Two-Part Question Essay</h3>
+      
+        <p>
+          Some questions contain two separate questions that must both be answered.
+        </p>
+      
+        <p>
+          🎯 You must answer both questions clearly and give sufficient explanation for each one.
+        </p>
+      
+        <h3>🏗️ Recommended Essay Structure</h3>
+      
+        <h3>1️⃣ Introduction</h3>
+      
+        <p>
+          Paraphrase the question and clearly present your position or the main idea of your essay.
+        </p>
+      
+        <h3>2️⃣ Body Paragraph 1</h3>
+      
+        <p>
+          Present your first main idea and develop it with an explanation and a relevant example.
+        </p>
+      
+        <p>
+          💡 Main Idea → 🔍 Explanation → 📌 Example → 🔗 Link to the question
+        </p>
+      
+        <h3>3️⃣ Body Paragraph 2</h3>
+      
+        <p>
+          Present your second main idea and develop it in the same way.
+        </p>
+      
+        <p>
+          💡 Main Idea → 🔍 Explanation → 📌 Example → 🎯 Result
+        </p>
+      
+        <h3>4️⃣ Conclusion</h3>
+      
+        <p>
+          Summarise the main ideas discussed and restate your position or overall answer.
+        </p>
+      
+        <p>
+          🚫 Do not introduce a completely new idea in the conclusion.
+        </p>
+      
+        <h3>🧠 Developing Your Ideas</h3>
+      
+        <p>
+          A strong essay does not simply list ideas. Each main point should be properly explained and supported.
+        </p>
+      
+        <p>
+          🏆 A useful approach is:
+        </p>
+      
+        <p>
+          💡 <strong>Point</strong> → 🔍 <strong>Explain</strong> → 📌 <strong>Example</strong> → 🎯 <strong>Result</strong>
+        </p>
+      
+        <h3>🔗 Coherence and Cohesion</h3>
+      
+        <p>
+          Your essay should be logically organised and easy to follow.
+        </p>
+      
+        <ul>
+          <li>➕ Furthermore</li>
+          <li>➕ In addition</li>
+          <li>⚖️ However</li>
+          <li>🔄 On the other hand</li>
+          <li>🔍 For example</li>
+          <li>🎯 As a result</li>
+          <li>🔗 Therefore</li>
+          <li>📌 Consequently</li>
+        </ul>
+      
+        <h3>📚 Vocabulary and Grammar</h3>
+      
+        <p>
+          Use a wide range of appropriate vocabulary and grammatical structures. However, accuracy is more important than using unnecessarily complicated words or sentences.
+        </p>
+      
+        <ul>
+          <li>📝 Simple and compound sentences</li>
+          <li>🏗️ Complex sentences</li>
+          <li>🔄 Conditional sentences</li>
+          <li>📌 Relative clauses</li>
+          <li>⚖️ Passive structures where appropriate</li>
+        </ul>
+      
+        <h3>⚠️ Important Rules</h3>
+      
+        <ul>
+          <li>📝 Write at least <strong>250 words</strong>.</li>
+          <li>🎯 Answer every part of the question.</li>
+          <li>💭 Clearly express your opinion when required.</li>
+          <li>🔗 Organise your essay into clear paragraphs.</li>
+          <li>📌 Support your ideas with explanations and examples.</li>
+          <li>🚫 Do not write memorised, irrelevant essays.</li>
+          <li>🚫 Do not include unrelated ideas.</li>
+          <li>🔤 Check grammar, spelling and punctuation.</li>
+        </ul>
+      
+        <h3>📊 How Writing Task 2 Is Assessed</h3>
+      
+        <ul>
+          <li>🎯 <strong>Task Response:</strong> How completely you answer and develop the question.</li>
+          <li>🔗 <strong>Coherence and Cohesion:</strong> How logically you organise and connect your ideas.</li>
+          <li>📚 <strong>Lexical Resource:</strong> The range and accuracy of your vocabulary.</li>
+          <li>✍️ <strong>Grammatical Range and Accuracy:</strong> The variety and accuracy of your grammar.</li>
+        </ul>
+      
+        <h3>🚀 The Main Goal</h3>
+      
+        <p>
+          The goal of IELTS Writing Task 2 is to present a clear position, develop relevant ideas logically, support your arguments with explanations and examples, and communicate your ideas accurately using appropriate vocabulary and grammar.
+        </p>
+      
+        <p>
+          🏆 <strong>A strong Task 2 essay usually follows this pattern:</strong>
+        </p>
+      
+        <p>
+          🎯 Introduction → 💡 Main Idea 1 → 💡 Main Idea 2 → 🏁 Conclusion
+        </p>
+      `
+    },
+    prompt:{ academic:'Nowadays, a lot of people are able to do their work from home. Discuss the advantages and disadvantages of this development. Write at least 250 words.',
+             general:'Nowadays, a lot of people are able to do their work from home. Discuss the advantages and disadvantages of this development. Write at least 250 words.' } }
+];
+
+const state = { completed: new Set(), current: MODULES[0].id, speakingIndex:{} };
+
+/* ============================================================
+   RENDER SIDEBAR
+   ============================================================ */
+const navList = document.getElementById('navList');
+function renderNav(){
+  navList.innerHTML = '';
+  MODULES.forEach((m,i)=>{
+    const el = document.createElement('div');
+    el.className = 'nav-item' + (m.id===state.current?' active':'') + (state.completed.has(m.id)?' done':'');
+    el.setAttribute('role','button');
+    el.tabIndex = 0;
+    el.onclick = ()=>showModule(m.id);
+    el.innerHTML = `<div class="nav-badge">${state.completed.has(m.id) ? '✓' : (i+1)}</div>
+      <div class="num">${m.title}<div class="step">${m.step}</div></div>`;
+    navList.appendChild(el);
+  });
+}
+
+/* ============================================================
+   RENDER MODULES
+   ============================================================ */
+const host = document.getElementById('modulesHost');
+
+function fmtVideo(m){ return typeof m.video === 'string' ? m.video : m.video[FORMAT.current]; }
+function fmtInfo(m){ return typeof m.info === 'string' ? m.info : m.info[FORMAT.current]; }
+function fmtPrompt(m){ return typeof m.prompt === 'string' ? m.prompt : (m.prompt[FORMAT.current] || m.prompt.academic); }
+function fmtPassage(m){ return Array.isArray(m.passage) ? m.passage : m.passage[FORMAT.current]; }
+function fmtQuiz(m){ return Array.isArray(m.quiz) ? m.quiz : m.quiz[FORMAT.current]; }
+function fmtTable(m){ if(!m.table) return ''; return typeof m.table === 'string' ? m.table : (m.table[FORMAT.current] || ''); }
+
+function buildModule(m, idx){
+  const wrap = document.createElement('section');
+  wrap.className = 'module';
+  wrap.id = 'mod-' + m.id;
+
+  let extraHTML = '';
+
+  if(m.type === 'speaking'){
+    extraHTML = `
+      <div class="section-title"><span class="dot"></span>Practice Speaking</div>
+      <div class="practice-box">
+        <div class="q-count" id="qcount-${m.id}"></div>
+        <div class="q-text" id="qtext-${m.id}"></div>
+        <div class="q-hint">Say your answer out loud before moving to the next question. There's no recording — this is just for practice.</div>
+      </div>
+      <div class="row-between">
+        <button class="btn btn-outline" onclick="prevQ('${m.id}')">‹ Previous</button>
+        <button class="btn btn-teal" onclick="nextQ('${m.id}')">Next question ›</button>
+      </div>`;
+  }
+
+  if(m.type === 'listening'){
+    extraHTML = `
+      <div class="section-title"><span class="dot"></span>Listen &amp; Answer</div>
+      <audio controls src="${m.audio}"></audio>
+      <div id="quiz-${m.id}"></div>
+      <div class="row-between">
+        <button class="btn btn-orange" onclick="checkQuiz('${m.id}')">Check Answers</button>
+        <div class="result-box" id="result-${m.id}"></div>
+      </div>`;
+  }
+
+  if(m.type === 'reading'){
+    extraHTML = `
+      <div class="section-title"><span class="dot"></span>Reading Passage</div>
+      <div class="passage" id="passage-${m.id}"></div>
+      <div class="section-title"><span class="dot"></span>Answer the Questions</div>
+      <div id="quiz-${m.id}"></div>
+      <div class="row-between">
+        <button class="btn btn-orange" onclick="checkQuiz('${m.id}')">Check Answers</button>
+        <div class="result-box" id="result-${m.id}"></div>
+      </div>`;
+  }
+
+  if(m.type === 'writing'){
+    extraHTML = `
+      <div class="section-title"><span class="dot"></span>Sample Task</div>
+      <div class="prompt-box" id="prompt-${m.id}"></div>
+      <div class="table-wrap" id="table-${m.id}"></div>
+      <textarea placeholder="Write your response here — this stays on your screen for local practice only." oninput="updateWordCount('${m.id}')" id="writing-${m.id}"></textarea>
+      <div class="word-count" id="wc-${m.id}">0 words</div>`;
+  }
+
+  wrap.innerHTML = `
+    <div class="module-head">
+      <h2>${m.title}</h2>
+      <span class="module-tag">${m.tag}</span>
+    </div>
+    <p class="module-sub">${m.step} of 7</p>
+    <div class="video-wrap"><iframe id="iframe-${m.id}" src="" title="${m.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+    <div class="info-box" id="info-${m.id}"></div>
+    ${extraHTML}
+    <div class="complete-strip">
+      <div class="nav-arrows">
+        <button class="btn btn-outline" onclick="goRelative(${idx}, -1)" ${idx===0?'disabled':''}>‹ Previous module</button>
+        <button class="btn btn-outline" onclick="goRelative(${idx}, 1)" ${idx===MODULES.length-1?'disabled':''}>Next module ›</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span class="done-note" id="donenote-${m.id}">✓ Completed</span>
+        <button class="btn btn-teal" id="completebtn-${m.id}" onclick="markComplete('${m.id}')">Mark module complete</button>
+      </div>
+    </div>
+  `;
+  host.appendChild(wrap);
+}
+
+MODULES.forEach((m,i)=>buildModule(m,i));
+
+/* fill dynamic per-format content */
+function refreshModuleContent(){
+  MODULES.forEach(m=>{
+    document.getElementById('iframe-'+m.id).src = fmtVideo(m);
+    document.getElementById('info-'+m.id).innerHTML = fmtInfo(m);
+    if(m.type==='speaking'){ if(state.speakingIndex[m.id]===undefined) state.speakingIndex[m.id]=0; renderQuestion(m); }
+    if(m.type==='reading'){ document.getElementById('passage-'+m.id).innerHTML = fmtPassage(m).map(p=>`<p>${p}</p>`).join(''); }
+    if(m.type==='listening' || m.type==='reading'){ renderQuiz(m); }
+    if(m.type==='writing'){
+      document.getElementById('prompt-'+m.id).textContent = fmtPrompt(m);
+      document.getElementById('table-'+m.id).innerHTML = fmtTable(m);
+    }
+  });
+}
+
+/* ============================================================
+   SPEAKING PRACTICE
+   ============================================================ */
+function renderQuestion(m){
+  const i = state.speakingIndex[m.id];
+  const questions = m.questions[FORMAT.current];
+
+  document.getElementById('qcount-'+m.id).textContent =
+    `Question ${i+1} of ${questions.length}`;
+
+  document.getElementById('qtext-'+m.id).innerHTML =
+    questions[i].replace(/\n/g, '<br>');
+}
+
+function nextQ(id){
+  const m = MODULES.find(x=>x.id===id);
+  const questions = m.questions[FORMAT.current];
+
+  state.speakingIndex[id] =
+    (state.speakingIndex[id]+1) % questions.length;
+
+  renderQuestion(m);
+}
+
+function prevQ(id){
+  const m = MODULES.find(x=>x.id===id);
+  const questions = m.questions[FORMAT.current];
+
+  state.speakingIndex[id] =
+    (state.speakingIndex[id]-1+questions.length) % questions.length;
+
+  renderQuestion(m);
+}
+
+/* ============================================================
+   LISTENING / READING QUIZZES
+   ============================================================ */
+function renderQuiz(m){
+  const host = document.getElementById('quiz-'+m.id);
+  const quiz = fmtQuiz(m);
+  host.innerHTML = quiz.map((q,i)=>{
+    if(q.type==='mcq'){
+      return `<div class="quiz-q" id="quizq-${m.id}-${i}">
+        <div class="qn">${i+1}. ${q.q}</div>
+        <div class="options">
+          ${q.options.map(opt=>`<label><input type="radio" name="${m.id}-${i}" value="${opt}"> ${opt}</label>`).join('')}
+        </div></div>`;
+    }
+    return `<div class="quiz-q" id="quizq-${m.id}-${i}">
+      <div class="qn">${i+1}. ${q.q}</div>
+      <input class="fill-input" type="text" id="${m.id}-${i}" placeholder="Your answer">
+    </div>`;
+  }).join('');
+  document.getElementById('result-'+m.id).classList.remove('show');
+}
+
+function checkQuiz(id){
+  const m = MODULES.find(x=>x.id===id);
+  const quiz = fmtQuiz(m);
+  let correct = 0;
+  quiz.forEach((q,i)=>{
+    const qEl = document.getElementById(`quizq-${id}-${i}`);
+    qEl.classList.remove('correct','incorrect');
+    const oldTag = qEl.querySelector('.tag-correct, .tag-incorrect'); if(oldTag) oldTag.remove();
+    let userVal = '';
+    if(q.type==='mcq'){
+      const sel = document.querySelector(`input[name="${id}-${i}"]:checked`);
+      userVal = sel ? sel.value : '';
+    } else {
+      userVal = (document.getElementById(`${id}-${i}`).value || '').trim();
+    }
+    const accepted = q.accept ? q.accept.map(a=>a.toLowerCase()) : [q.answer.toLowerCase()];
+    const isCorrect = userVal && accepted.includes(userVal.toLowerCase());
+    qEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+    const tag = document.createElement('span');
+    tag.className = isCorrect ? 'tag-correct' : 'tag-incorrect';
+    tag.textContent = isCorrect ? 'Correct' : `Answer: ${q.answer}`;
+    qEl.querySelector('.qn').appendChild(tag);
+    if(isCorrect) correct++;
+  });
+  const resultBox = document.getElementById('result-'+id);
+  resultBox.textContent = `Your score: ${correct} / ${quiz.length}`;
+  resultBox.classList.add('show');
+}
+
+/* ============================================================
+   WRITING WORD COUNT
+   ============================================================ */
+function updateWordCount(id){
+  const val = document.getElementById('writing-'+id).value.trim();
+  const words = val ? val.split(/\s+/).length : 0;
+  document.getElementById('wc-'+id).textContent = words + ' words';
+}
+
+/* ============================================================
+   NAVIGATION / PROGRESS
+   ============================================================ */
+function showModule(id){
+  state.current = id;
+  document.querySelectorAll('.module').forEach(el=>el.classList.remove('visible'));
+  document.getElementById('mod-'+id).classList.add('visible');
+  renderNav();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function goRelative(idx, dir){
+  const target = MODULES[idx+dir];
+  if(target) showModule(target.id);
+}
+
+function markComplete(id){
+  state.completed.add(id);
+  document.getElementById('donenote-'+id).classList.add('show');
+  document.getElementById('completebtn-'+id).textContent = 'Completed ✓';
+  document.getElementById('completebtn-'+id).disabled = true;
+  updateProgress();
+  const idx = MODULES.findIndex(m=>m.id===id);
+  if(idx < MODULES.length-1){ setTimeout(()=>showModule(MODULES[idx+1].id), 400); }
+}
+
+function updateProgress(){
+  const pct = Math.round((state.completed.size / MODULES.length) * 100);
+  document.getElementById('barFill').style.width = pct + '%';
+  document.getElementById('doneCount').textContent = state.completed.size;
+  renderNav();
+}
+
+function setFormat(fmt){
+  FORMAT.current = fmt;
+  document.getElementById('btnAcademic').classList.toggle('active', fmt==='academic');
+  document.getElementById('btnGeneral').classList.toggle('active', fmt==='general');
+  refreshModuleContent();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+refreshModuleContent();
+renderNav();
+showModule(MODULES[0].id);
+updateProgress();
+</script>
+</body>
+</html>
