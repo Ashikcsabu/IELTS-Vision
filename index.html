@@ -289,33 +289,33 @@
 
   .nav-arrows{display:flex; gap:10px;}
 
-.mobile-nav-toggle{ display:none; }
+  .mobile-nav-toggle{ display:none; }
 
-@media (max-width:900px){
-  body{flex-direction:column;}
-  .sidebar{
-    width:100%; height:auto; position:sticky; top:0; z-index:50;
-    flex-direction:column; align-items:stretch; overflow:visible;
+  @media (max-width:900px){
+    body{flex-direction:column;}
+    .sidebar{
+      width:100%; height:auto; position:relative; z-index:50;
+      flex-direction:column; align-items:stretch; overflow:visible;
+    }
+    .sidebar .logo{border:none; margin:0 0 10px 0; padding:4px 0;}
+
+    .mobile-nav-toggle{
+      display:flex; align-items:center; gap:8px; width:100%;
+      padding:12px 14px; border-radius:10px; cursor:pointer;
+      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+      color:#fff; font-family:'Inter',sans-serif; font-weight:600; font-size:14px;
+    }
+    .mobile-nav-toggle .chev{margin-left:auto; transition:transform .2s ease;}
+    .sidebar.nav-open .mobile-nav-toggle .chev{transform:rotate(180deg);}
+
+    .nav-label{display:block; margin-top:14px;}
+    #navList{display:none; flex-direction:column; max-height:60vh; overflow-y:auto;}
+    .sidebar.nav-open #navList{display:flex;}
+
+    .side-footer{display:none;}
+    .nav-item{white-space:normal;}
+    .main{padding:20px;}
   }
-  .sidebar .logo{border:none; margin:0 0 10px 0; padding:4px 0;}
-
-  .mobile-nav-toggle{
-    display:flex; align-items:center; gap:8px; width:100%;
-    padding:12px 14px; border-radius:10px; cursor:pointer;
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-    color:#fff; font-family:'Inter',sans-serif; font-weight:600; font-size:14px;
-  }
-  .mobile-nav-toggle .chev{margin-left:auto; transition:transform .2s ease;}
-  .sidebar.nav-open .mobile-nav-toggle .chev{transform:rotate(180deg);}
-
-  .nav-label{display:block; margin-top:14px;}
-  #navList{display:none; flex-direction:column; max-height:60vh; overflow-y:auto;}
-  .sidebar.nav-open #navList{display:flex;}
-
-  .side-footer{display:none;}
-  .nav-item{white-space:normal;}
-  .main{padding:20px;}
-}
 
   :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
 </style>
@@ -328,10 +328,12 @@
     <div class="cap">🎓</div>
     <div class="name">IELTS VISION<span>ORIENTATION</span></div>
   </div>
+
   <button class="mobile-nav-toggle" id="mobileNavToggle" onclick="toggleMobileNav()"
-        aria-expanded="false" aria-controls="navList" aria-label="Open module menu">
-  <span aria-hidden="true">☰</span><span>Select Module</span><span class="chev" aria-hidden="true">▾</span>
+          aria-expanded="false" aria-controls="navList" aria-label="Open module menu">
+    <span aria-hidden="true">☰</span><span class="toggle-label">Select Module</span><span class="chev" aria-hidden="true">▾</span>
   </button>
+
   <div class="nav-label">Learning Path</div>
   <nav id="navList"></nav>
 
@@ -392,6 +394,16 @@ function toggleTheme(){
   if(!saved){ saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
   applyTheme(saved);
 })();
+
+/* ============================================================
+   MOBILE NAV TOGGLE
+   ============================================================ */
+function toggleMobileNav(){
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.getElementById('mobileNavToggle');
+  const isOpen = sidebar.classList.toggle('nav-open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
 
 /* ============================================================
    DATA
@@ -1341,7 +1353,7 @@ and explain how it would help you.`,
       { q:'Story must include: a ______ .', type:'text', answer:'surprising ending', accept:['surprising ending','surprise ending','surprise'] },
       { q:'Minimum age: ______ .', type:'text', answer:'16', accept:['16','sixteen'] },
       { q:'Last entry date: 1st ______ .', type:'text', answer:'August', accept:['august'] },
-      { q:'Web address: www. ______ .com', type:'text', answer:'COMPASS', accept:['compass'] },
+      { q:'Web address: www. ______ .com', type:'text', answer:'COMP4SS', accept:['comp4ss'] },
       { q:'Don\u2019t: ______ the story to the organisers.', type:'text', answer:'post', accept:['post'] },
       { q:'The competition is judged by ______ .', type:'text', answer:'famous authors', accept:['famous authors','published authors'] },
       { q:'The top five stories will be available ______ .', type:'text', answer:'online', accept:['online'] },
@@ -2751,13 +2763,6 @@ function renderNav(){
   });
 }
 
-function toggleMobileNav(){
-  const sidebar = document.querySelector('.sidebar');
-  const btn = document.getElementById('mobileNavToggle');
-  const isOpen = sidebar.classList.toggle('nav-open');
-  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-}
-
 /* ============================================================
    RENDER MODULES
    ============================================================ */
@@ -2960,16 +2965,28 @@ function updateWordCount(id){
 /* ============================================================
    NAVIGATION / PROGRESS
    ============================================================ */
-function showModule(id){
+function updateMobileNavLabel(text){
+  const label = document.querySelector('#mobileNavToggle .toggle-label');
+  if(label) label.textContent = text;
+}
+
+function showModule(id, isInitial){
   state.current = id;
   document.querySelectorAll('.module').forEach(el=>el.classList.remove('visible'));
   document.getElementById('mod-'+id).classList.add('visible');
   renderNav();
   window.scrollTo({top:0, behavior:'smooth'});
+
+  if(!isInitial){
+    const mod = MODULES.find(m=>m.id===id);
+    if(mod) updateMobileNavLabel(mod.title);
+  }
+
   const sidebar = document.querySelector('.sidebar');
   if(sidebar.classList.contains('nav-open')){
     sidebar.classList.remove('nav-open');
-    document.getElementById('mobileNavToggle').setAttribute('aria-expanded', 'false');
+    const toggleBtn = document.getElementById('mobileNavToggle');
+    if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
   }
 }
 
@@ -3007,7 +3024,7 @@ function setFormat(fmt){
    ============================================================ */
 refreshModuleContent();
 renderNav();
-showModule(MODULES[0].id);
+showModule(MODULES[0].id, true);
 updateProgress();
 </script>
 </body>
