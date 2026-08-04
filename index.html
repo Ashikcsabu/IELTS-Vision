@@ -2746,6 +2746,39 @@ and explain how it would help you.`,
 const state = { completed: new Set(), current: MODULES[0].id, speakingIndex:{} };
 
 /* ============================================================
+   PROGRESS PERSISTENCE (localStorage)
+   ============================================================ */
+const PROGRESS_KEY = 'ielts-vision-progress';
+
+function saveProgress(){
+  try{
+    const data = {
+      completed: Array.from(state.completed),
+      current: state.current
+    };
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+  }catch(e){
+    console.warn('Could not save progress:', e);
+  }
+}
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    if(Array.isArray(data.completed)){
+      data.completed.forEach(id => state.completed.add(id));
+    }
+    if(data.current && MODULES.some(m => m.id === data.current)){
+      state.current = data.current;
+    }
+  }catch(e){
+    console.warn('Could not load progress:', e);
+  }
+}
+
+/* ============================================================
    RENDER SIDEBAR
    ============================================================ */
 const navList = document.getElementById('navList');
@@ -2976,6 +3009,7 @@ function showModule(id, isInitial){
   document.getElementById('mod-'+id).classList.add('visible');
   renderNav();
   window.scrollTo({top:0, behavior:'smooth'});
+  saveProgress();
 
   if(!isInitial){
     const mod = MODULES.find(m=>m.id===id);
@@ -3001,6 +3035,7 @@ function markComplete(id){
   document.getElementById('completebtn-'+id).textContent = 'Completed ✓';
   document.getElementById('completebtn-'+id).disabled = true;
   updateProgress();
+  saveProgress();
   const idx = MODULES.findIndex(m=>m.id===id);
   if(idx < MODULES.length-1){ setTimeout(()=>showModule(MODULES[idx+1].id), 400); }
 }
@@ -3022,9 +3057,16 @@ function setFormat(fmt){
 /* ============================================================
    INIT
    ============================================================ */
+loadProgress(); 
+state.completed.forEach(id=>{
+  const note = document.getElementById('donenote-'+id);
+  const btn = document.getElementById('completebtn-'+id);
+  if(note) note.classList.add('show');
+  if(btn){ btn.textContent = 'Completed ✓'; btn.disabled = true; }
+});  
 refreshModuleContent();
 renderNav();
-showModule(MODULES[0].id, true);
+showModule(state.current, true);
 updateProgress();
 </script>
 </body>
