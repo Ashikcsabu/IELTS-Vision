@@ -365,6 +365,7 @@
     <div class="progress-top">
       <div class="label">Orientation Progress</div>
       <div class="count"><b id="doneCount">0</b> / 7 modules completed</div>
+      <button class="btn btn-outline" onclick="clearProgress()" style="padding:6px 12px; font-size:12.5px;">Reset progress</button>
     </div>
     <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
   </div>
@@ -2754,7 +2755,8 @@ function saveProgress(){
   try{
     const data = {
       completed: Array.from(state.completed),
-      current: state.current
+      current: state.current,
+      format: FORMAT.current
     };
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
   }catch(e){
@@ -2773,9 +2775,31 @@ function loadProgress(){
     if(data.current && MODULES.some(m => m.id === data.current)){
       state.current = data.current;
     }
+    if(data.format === 'academic' || data.format === 'general'){
+      FORMAT.current = data.format;
+    }
   }catch(e){
     console.warn('Could not load progress:', e);
   }
+}
+
+function clearProgress(){
+  if(!confirm('This will erase all your completed modules. Are you sure?')) return;
+
+  try{ localStorage.removeItem(PROGRESS_KEY); }catch(e){}
+
+  state.completed.clear();
+  state.current = MODULES[0].id;
+
+  MODULES.forEach(m=>{
+    const note = document.getElementById('donenote-'+m.id);
+    const btn = document.getElementById('completebtn-'+m.id);
+    if(note) note.classList.remove('show');
+    if(btn){ btn.textContent = 'Mark module complete'; btn.disabled = false; }
+  });
+
+  updateProgress();
+  showModule(MODULES[0].id, true);
 }
 
 /* ============================================================
@@ -3052,12 +3076,15 @@ function setFormat(fmt){
   document.getElementById('btnAcademic').classList.toggle('active', fmt==='academic');
   document.getElementById('btnGeneral').classList.toggle('active', fmt==='general');
   refreshModuleContent();
+  saveProgress();
 }
 
 /* ============================================================
    INIT
    ============================================================ */
 loadProgress(); 
+document.getElementById('btnAcademic').classList.toggle('active', FORMAT.current==='academic');
+document.getElementById('btnGeneral').classList.toggle('active', FORMAT.current==='general');
 state.completed.forEach(id=>{
   const note = document.getElementById('donenote-'+id);
   const btn = document.getElementById('completebtn-'+id);
